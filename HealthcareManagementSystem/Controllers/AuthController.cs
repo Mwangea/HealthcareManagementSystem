@@ -27,7 +27,10 @@ namespace HealthcareManagementSystem.Controllers
                 return Unauthorized(new { message = "Invalid username or password" });
             }
 
-            return Ok(new { message = "Login successfull" });
+            return Ok(new { message = "Login successfull",
+                token = response.Token,
+                role = response.Role
+            });
 
         }
 

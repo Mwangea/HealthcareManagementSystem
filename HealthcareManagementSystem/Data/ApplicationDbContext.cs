@@ -7,7 +7,7 @@ namespace HealthcareManagementSystem.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         
-       // public DbSet<Patient> Patients { get; set; }
+        public DbSet<Patient> Patients { get; set; }
       //  public DbSet<Prescription> Prescriptions { get; set; }
         //public DbSet<Invoice> Invoices { get; set; }
         //public DbSet<Report> Reports { get; set; }

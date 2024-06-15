@@ -65,6 +65,7 @@ namespace HealthcareManagementSystem
             });
 
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IPatientService, PatientService>();
             
         }
 

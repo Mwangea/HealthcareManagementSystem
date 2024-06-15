@@ -38,11 +38,20 @@ namespace HealthcareManagementSystem.Services
             // Generate JWT Token
             var token = GenerateJwtToken(user);
 
-            return new LoginResponse { Token = token };
+            return new LoginResponse { Token = token, Role = user.Role };
         }
 
         public async Task<RegisterResponse> Register(RegisterRequest registerRequest)
         {
+
+            //validate request
+            if (string.IsNullOrEmpty(registerRequest.Username) ||
+                string.IsNullOrEmpty(registerRequest.Password) ||
+                string.IsNullOrEmpty(registerRequest.Email) ||
+                string.IsNullOrEmpty(registerRequest.Role))
+            {
+                throw new ArgumentException("Username, password, email, and role are required");
+            }
             if (await _context.Users.AnyAsync(u => u.Username == registerRequest.Username))
             {
                 throw new Exception("Username already exists");
