@@ -24,13 +24,16 @@ namespace HealthcareManagementSystem.Servives
 
         public async Task AddPatientAsync(Patient patient)
         {
-            _context.Patients.Add(patient);
-            await _context.SaveChangesAsync();
+            var existingPatient = await _context.Patients.FindAsync();
         }
 
-        public async Task UpdatePatientAsync(Patient patient)
+        public async Task UpdatePatientAsync(int id)
         {
-            _context.Entry(patient).State = EntityState.Modified;
+            var patient = await _context.Patients.FindAsync(id);
+            if (patient != null)
+            {
+                _context.Patients.Update(patient);
+            }
             await _context.SaveChangesAsync();
         }
 

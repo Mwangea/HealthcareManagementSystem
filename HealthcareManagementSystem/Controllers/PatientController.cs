@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HealthcareManagementSystem.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace HealthcareManagementSystem.Controllers
 {
@@ -17,14 +18,14 @@ namespace HealthcareManagementSystem.Controllers
         }
 
         [HttpGet]
-      //  [Authorize(Policy = "DoctorOnly")]
+       [Authorize(Policy = "DoctorOnly")]
         public async Task<ActionResult<List<Patient>>> GetPatients()
         {
             return await _patientService.GetAllPatientsAsync();
         }
 
         [HttpGet("{id}")]
-       // [Authorize(Policy = "DoctorOnly")]
+        [Authorize(Policy = "DoctorOnly")]
         
         public async Task<ActionResult<Patient>> GetPatientById(int id)
         {
@@ -38,7 +39,7 @@ namespace HealthcareManagementSystem.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Policy = "DoctorOnly")]
+        [Authorize(Policy = "DoctorOnly")]
         public async Task<ActionResult> AddPatient([FromBody] Patient patient)
         {
             await _patientService.AddPatientAsync(patient);
@@ -48,6 +49,33 @@ namespace HealthcareManagementSystem.Controllers
                 new { id = patient.Pat_id },
                 new { message = "Patient created successfully", patient }
             );
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Policy = "DoctorOnly")]
+        public async Task<IActionResult> UpdatePatient(int id, [FromBody] Patient patient)
+        {
+            if (id != patient.Pat_id)
+            {
+                return BadRequest(new { message = "Patient ID mismatch" });
+            }
+
+            var existingPatient = await _patientService.GetPatientByIdAsync(id);
+            if (existingPatient == null)
+            {
+                return NotFound(new { message = "Patient not found" });
+            }
+
+            await _patientService.UpdatePatientAsync(id);
+            return Ok(new { message = "Patient updated successfully"});
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Policy ="DoctorOnly")]
+        public async Task<IActionResult> DeletePatient(int id)
+        {
+            await _patientService.DeletePatientAsync(id);
+            return Ok(new { message = "Deleted successfully" });
         }
 
     }
