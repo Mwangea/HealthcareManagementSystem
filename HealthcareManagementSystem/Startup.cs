@@ -1,6 +1,7 @@
 ﻿using HealthcareManagementSystem.Data;
 using HealthcareManagementSystem.Services;
 using HealthcareManagementSystem.Servives;
+using HealthcareManagementSystem.Servives.AdminService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -65,6 +66,7 @@ namespace HealthcareManagementSystem
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IPatientService, PatientService>();
+            services.AddScoped<IAdminService, AdminService>();
             
         }
 
@@ -77,8 +79,8 @@ namespace HealthcareManagementSystem
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

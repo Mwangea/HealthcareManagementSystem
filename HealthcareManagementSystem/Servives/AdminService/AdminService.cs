@@ -47,9 +47,9 @@ namespace HealthcareManagementSystem.Servives.AdminService
                 throw new ArgumentException("Username, password, and email are required");
             }
 
-            if (await _context.Admins.AnyAsync(a => a.Username == adminRegisterRequest.Username))
+            if (await _context.Admins.AnyAsync(a => a.Email == adminRegisterRequest.Email))
             {
-                throw new Exception("Username already exists");
+                throw new Exception("Email already exists");
             }
 
             var admin = new Admin
