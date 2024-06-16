@@ -90,5 +90,15 @@ namespace HealthcareManagementSystem.Servives.AdminService
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        public async Task DeleteDoctorAsync(int id)
+        {
+            var doctor = await _context.Doctors.FindAsync(id);
+            if (doctor != null)
+            {
+                _context.Doctors.Remove(doctor);
+                await _context.SaveChangesAsync();
+            }
+        }
+
     }
 }

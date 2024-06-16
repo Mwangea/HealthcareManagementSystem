@@ -77,4 +77,39 @@ namespace HealthcareManagementSystem.DTOs
         public string Message { get; set; }
         public string AdminId { get; set; }
     }
+
+    public class DoctorRegisterRequest
+    {
+        [Required(ErrorMessage = "Username is required")]
+        public string Username { get; set; }
+
+        [Required(ErrorMessage = "Password is required")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Specialty is required")]
+        public string Specialty { get; set; }
+
+    }
+    public class DoctorRegisterResponse
+    {
+        public string Message { get; set; }
+        public string DoctorId { get; set; }
+
+    }
+
+    public class DoctorLoginRequest
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class DoctorLoginResponse
+    {
+        public string Token { get; set; } 
+
+    }
 }

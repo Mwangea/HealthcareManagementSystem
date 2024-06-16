@@ -6,5 +6,7 @@ namespace HealthcareManagementSystem.Servives.AdminService
     {
         Task<AdminLoginResponse> Authenticate(AdminLoginRequest adminLoginRequest);
         Task<AdminRegisterResponse> Register(AdminRegisterRequest adminRegisterRequest);
+
+        Task DeleteDoctorAsync(int id);
     }
 }

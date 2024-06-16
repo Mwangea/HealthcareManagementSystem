@@ -30,6 +30,15 @@ namespace HealthcareManagementSystem.Controllers
             return Ok(response);
         }
 
+        [HttpDelete("{id}")]
+        [Authorize(Policy = "Admin")]
+        public async Task<IActionResult> DeleteDoctor(int id)
+        {
+            await _adminService.DeleteDoctorAsync(id);
+            return Ok(new { message = "Deleted successfully" });
+        }
+
+
 
     }
 }

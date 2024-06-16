@@ -2,6 +2,7 @@
 using HealthcareManagementSystem.Services;
 using HealthcareManagementSystem.Servives;
 using HealthcareManagementSystem.Servives.AdminService;
+using HealthcareManagementSystem.Servives.DoctorService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -66,8 +67,10 @@ namespace HealthcareManagementSystem
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IPatientService, PatientService>();
-            services.AddScoped<IAdminService, AdminService>();
             
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IDoctorService, DoctorService>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
