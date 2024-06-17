@@ -73,7 +73,7 @@ namespace HealthcareManagementSystem.Controllers
         [HttpDelete("{id}")]
         [Authorize(Policy ="DoctorOnly")]
         public async Task<IActionResult> DeletePatient(int id)
-        {
+        { 
             await _patientService.DeletePatientAsync(id);
             return Ok(new { message = "Deleted successfully" });
         }

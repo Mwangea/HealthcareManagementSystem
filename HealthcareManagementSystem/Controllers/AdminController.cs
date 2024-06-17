@@ -1,12 +1,15 @@
-﻿using HealthcareManagementSystem.DTOs;
+﻿using HealthcareManagementSystem.Data;
+using HealthcareManagementSystem.DTOs;
 using HealthcareManagementSystem.Servives.AdminService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using HealthcareManagementSystem.Servives.DoctorService;
 
 namespace HealthcareManagementSystem.Controllers
 {
     [Route("api/admin")]
     [ApiController]
+
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService; 
@@ -30,12 +33,28 @@ namespace HealthcareManagementSystem.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("{id}")]
+       
+
+        [HttpGet("doctors")]
         [Authorize(Policy = "Admin")]
-        public async Task<IActionResult> DeleteDoctor(int id)
+        public async Task<ActionResult<List<DoctorDT0s>>> GetAllDoctors()
         {
-            await _adminService.DeleteDoctorAsync(id);
-            return Ok(new { message = "Deleted successfully" });
+            var doctors = await _adminService.GetAllDoctorsAsync();
+            return Ok(doctors);
+        }
+
+        [Authorize(Policy = "Admin")]
+        [HttpGet("doctors/{id}")]
+        public async Task<ActionResult<DoctorDT0s>> GetDoctorById(int id)
+        {
+            var doctor = await _adminService.GetDoctorByIdAsync(id);
+
+            if (doctor == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(doctor);
         }
 
 

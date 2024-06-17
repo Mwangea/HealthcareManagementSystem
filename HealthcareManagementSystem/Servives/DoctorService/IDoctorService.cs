@@ -1,4 +1,5 @@
-﻿using HealthcareManagementSystem.DTOs;
+﻿using HealthcareManagementSystem.Data;
+using HealthcareManagementSystem.DTOs;
 
 namespace HealthcareManagementSystem.Servives.DoctorService
 {
@@ -6,5 +7,7 @@ namespace HealthcareManagementSystem.Servives.DoctorService
     {
         Task<DoctorLoginResponse> Authenticate(DoctorLoginRequest doctorLoginRequest);
         Task<DoctorRegisterResponse> Register(DoctorRegisterRequest doctorRegisterRequest);
+
+        
     }
 }

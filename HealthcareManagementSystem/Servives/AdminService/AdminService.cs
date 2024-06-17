@@ -69,6 +69,37 @@ namespace HealthcareManagementSystem.Servives.AdminService
             };
         }
 
+        public async Task<List<DoctorDT0s>> GetAllDoctorsAsync()
+        {
+            return await _context.Doctors
+                .Select(d => new DoctorDT0s
+                {
+                    Id = d.Id,
+                    Username = d.Username,
+                    Email = d.Email,
+                    Specialty = d.Specialty
+                })
+                .ToListAsync();
+        }
+
+        public async Task<DoctorDT0s> GetDoctorByIdAsync(int id)
+        {
+            var doctor = await _context.Doctors.FindAsync(id);
+
+            if (doctor == null)
+                return null;
+
+            return new DoctorDT0s
+            {
+                Id = doctor.Id,
+                Username = doctor.Username,
+                Email = doctor.Email,
+                Specialty = doctor.Specialty
+            };
+        }
+
+        
+
         private string GenerateJwtToken(Admin admin)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
@@ -90,15 +121,9 @@ namespace HealthcareManagementSystem.Servives.AdminService
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task DeleteDoctorAsync(int id)
-        {
-            var doctor = await _context.Doctors.FindAsync(id);
-            if (doctor != null)
-            {
-                _context.Doctors.Remove(doctor);
-                await _context.SaveChangesAsync();
-            }
-        }
+        
+
+      
 
     }
 }

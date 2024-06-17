@@ -1,4 +1,5 @@
-﻿using HealthcareManagementSystem.DTOs;
+﻿using HealthcareManagementSystem.Data;
+using HealthcareManagementSystem.DTOs;
 
 namespace HealthcareManagementSystem.Servives.AdminService
 {
@@ -7,6 +8,7 @@ namespace HealthcareManagementSystem.Servives.AdminService
         Task<AdminLoginResponse> Authenticate(AdminLoginRequest adminLoginRequest);
         Task<AdminRegisterResponse> Register(AdminRegisterRequest adminRegisterRequest);
 
-        Task DeleteDoctorAsync(int id);
+        Task<List<DoctorDT0s>> GetAllDoctorsAsync();
+        Task<DoctorDT0s> GetDoctorByIdAsync(int id);
     }
 }

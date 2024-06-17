@@ -70,6 +70,8 @@ namespace HealthcareManagementSystem.Servives.DoctorService
             };
         }
 
+        
+
         private string GenerateJwtToken(Doctor doctor)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
