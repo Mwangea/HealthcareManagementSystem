@@ -18,14 +18,14 @@ namespace HealthcareManagementSystem.Controllers
         }
 
         [HttpGet]
-       [Authorize(Policy = "DoctorOnly")]
+       [Authorize(Policy = "Doctor,Admin")]
         public async Task<ActionResult<List<Patient>>> GetPatients()
         {
             return await _patientService.GetAllPatientsAsync();
         }
 
         [HttpGet("{id}")]
-        [Authorize(Policy = "DoctorOnly")]
+        [Authorize(Policy = "Doctor,Admin")]
         
         public async Task<ActionResult<Patient>> GetPatientById(int id)
         {
@@ -39,7 +39,7 @@ namespace HealthcareManagementSystem.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "DoctorOnly")]
+        [Authorize(Policy = "Doctor,Admin")]
         public async Task<ActionResult> AddPatient([FromBody] Patient patient)
         {
             await _patientService.AddPatientAsync(patient);
@@ -52,7 +52,7 @@ namespace HealthcareManagementSystem.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Policy = "DoctorOnly")]
+        [Authorize(Policy = "Doctor,Admin")]
         public async Task<IActionResult> UpdatePatient(int id, [FromBody] Patient patient)
         {
             if (id != patient.Pat_id)
@@ -71,7 +71,7 @@ namespace HealthcareManagementSystem.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Policy ="DoctorOnly")]
+        [Authorize(Policy ="Doctor,Admin")]
         public async Task<IActionResult> DeletePatient(int id)
         { 
             await _patientService.DeletePatientAsync(id);

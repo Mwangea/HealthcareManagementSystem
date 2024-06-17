@@ -57,7 +57,43 @@ namespace HealthcareManagementSystem.Controllers
             return Ok(doctor);
         }
 
+        [Authorize(Policy = "Admin")]
+        [HttpPut("doctors/{id}")]
 
+        public async Task<IActionResult> UpdateDoctor(int id, [FromBody] DoctorUpdateRequest doctorUpdateRequest)
+        {
+            var doctor = await _adminService.UpdateDoctorAsync(id, doctorUpdateRequest);
+
+            if (doctor == null)
+            {
+                return NotFound(new { message = "Doctor not found" });
+            }
+
+            var existingDoctor = await _adminService.GetDoctorByIdAsync(id);
+            if (existingDoctor == null)
+            {
+                return NotFound(new { message = "Doctor not found" });
+            }
+
+           
+            return Ok(new { message = "Doctor updated successfully" });
+        }
+
+        [Authorize(Policy = "Admin")]
+        [HttpDelete("doctors/{id}")]
+        public async Task<IActionResult> DeleteDoctor(int id)
+        {
+            var success = await _adminService.DeleteDoctorAsync(id);
+
+            if (!success)
+            {
+                return NotFound(new { message = "Doctor not found" });
+            }
+
+            return Ok(new { message = "Docotor deleted successfuly"});
+        }
+
+       
 
     }
 }

@@ -35,10 +35,6 @@ namespace HealthcareManagementSystem
             var key = Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]);
 
             
-            if (key.Length < 32)
-            {
-                throw new ArgumentException("JWT key length must be at least 256 bits (32 bytes).");
-            }
 
             services.AddAuthentication(options =>
             {
@@ -62,7 +58,8 @@ namespace HealthcareManagementSystem
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-                options.AddPolicy("DoctorOnly", policy => policy.RequireRole("Doctor"));
+                options.AddPolicy("Doctor", policy => policy.RequireRole("Doctor"));
+                options.AddPolicy("Doctor,Admin", policy => policy.RequireRole("Doctor","Admin"));
             });
 
             services.AddScoped<IAuthService, AuthService>();

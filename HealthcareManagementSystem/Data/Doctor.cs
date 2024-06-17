@@ -17,4 +17,11 @@
         public string Email { get; set; }
         public string Specialty { get; set; }
     }
+    public class DoctorUpdateRequest
+    {
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string Specialty { get; set; }
+        // Add other properties as needed
+    }
 }
