@@ -21,7 +21,7 @@ namespace HealthcareManagementSystem.Data
         //public DbSet<Payroll> Payrolls { get; set; }
         //public DbSet<Vendor> Vendors { get; set; }
         public DbSet<User> Users { get; set; }
-
+        public DbSet<Appointment> Appointments { get; set; }
 
     }
 }

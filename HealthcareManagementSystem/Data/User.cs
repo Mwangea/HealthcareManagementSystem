@@ -55,6 +55,7 @@ namespace HealthcareManagementSystem.Data
         public string Pat_discharge_status { get; set; }
     }
 
+   
 
 }
 
