@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HealthcareManagementSystem.Models.Invoicemodel;
+using Microsoft.EntityFrameworkCore;
 using System.Numerics;
 
 namespace HealthcareManagementSystem.Data
@@ -11,8 +12,10 @@ namespace HealthcareManagementSystem.Data
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
 
-      //  public DbSet<Prescription> Prescriptions { get; set; }
-        //public DbSet<Invoice> Invoices { get; set; }
+        //public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<Charge> Charges { get; set; }
         //public DbSet<Report> Reports { get; set; }
         //public DbSet<MedicalRecord> MedicalRecords { get; set; }
         //public DbSet<LabaratoryTest> LabaratoryTests { get; set;  }

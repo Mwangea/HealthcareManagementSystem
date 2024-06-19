@@ -24,7 +24,8 @@ namespace HealthcareManagementSystem.Servives
 
         public async Task AddPatientAsync(Patient patient)
         {
-            var existingPatient = await _context.Patients.FindAsync();
+            _context.Patients.Add(patient);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdatePatientAsync(int id)

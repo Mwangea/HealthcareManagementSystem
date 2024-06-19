@@ -21,10 +21,19 @@ namespace HealthcareManagementSystem.Controllers
         [Authorize(Policy = "Doctor,Admin")]
         public async Task<ActionResult<AppointmentResponse>> CreateAppointment(CreateAppointmentRequest createAppointmentRequest)
         {
-            var response = await _appointmentService.CreateAppointmentAsync(createAppointmentRequest);
-            return CreatedAtAction(nameof(GetAppointmentById),
-            new { id = response.Id },
-            new { message = "Appointment created successfully", response });
+            try
+            {
+                var response = await _appointmentService.CreateAppointmentAsync(createAppointmentRequest);
+                return CreatedAtAction(nameof(GetAppointmentById),
+                new { id = response.Id },
+                new { message = "Appointment created successfully", response });
+            }
+            catch (Exception ex)
+            {
+               
+                return StatusCode(500, new { message = "Doctor not found" });
+            }
+
         }
 
         [HttpGet]

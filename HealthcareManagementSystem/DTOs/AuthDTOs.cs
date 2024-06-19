@@ -131,4 +131,71 @@ namespace HealthcareManagementSystem.DTOs
         public string Status { get; set; }
         public string Notes { get; set; }
     }
+
+    public class InvoiceDTO
+    {
+        public int Id { get; set; }
+        public string InvoiceNumber { get; set; }
+        public DateTime Date { get; set; }
+        public string PatientName { get; set; }
+        public int PatientId { get; set; }
+        public string InsuranceInformation { get; set; }
+        public List<ServiceDTO> Services { get; set; }
+        public List<ChargeDTO> Charges { get; set; }
+        public decimal Subtotal { get; set; }
+        public decimal Tax { get; set; }
+        public decimal Total { get; set; }
+        public string PaymentMethod { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public decimal AmountPaid { get; set; }
+    }
+
+    public class CreateInvoiceDTO
+    {
+        public int PatientId { get; set; }
+        public int DoctorId { get; set; }
+        public DateTime Date { get; set; }
+        public List<CreateServiceDTO> Services { get; set; }
+        public List<CreateChargeDTO> Charges { get; set; }
+        public decimal Subtotal { get; set; }
+        public decimal Tax { get; set; }
+        public decimal Total { get; set; }
+        public string PaymentMethod { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public decimal AmountPaid { get; set; }
+    }
+
+    public class ServiceDTO
+    {
+        public string Description { get; set; }
+        public string Code { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal Total { get; set; }
+    }
+
+    public class CreateServiceDTO
+    {
+        public string Description { get; set; }
+        public string Code { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+    }
+
+    public class ChargeDTO
+    {
+        public string Description { get; set; }
+        public string Code { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal Total { get; set; }
+    }
+
+    public class CreateChargeDTO
+    {
+        public string Description { get; set; }
+        public string Code { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+    }
 }
