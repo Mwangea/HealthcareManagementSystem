@@ -28,7 +28,7 @@ namespace HealthcareManagementSystem.Controllers
                 new { id = response.Id },
                 new { message = "Appointment created successfully", response });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                
                 return StatusCode(500, new { message = "Doctor not found" });

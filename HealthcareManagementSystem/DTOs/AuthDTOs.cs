@@ -139,6 +139,7 @@ namespace HealthcareManagementSystem.DTOs
         public DateTime Date { get; set; }
         public string PatientName { get; set; }
         public int PatientId { get; set; }
+        public int DoctorId { get; set; }
         public string InsuranceInformation { get; set; }
         public List<ServiceDTO> Services { get; set; }
         public List<ChargeDTO> Charges { get; set; }
@@ -148,6 +149,19 @@ namespace HealthcareManagementSystem.DTOs
         public string PaymentMethod { get; set; }
         public DateTime PaymentDate { get; set; }
         public decimal AmountPaid { get; set; }
+    }
+
+    public class UpdateInvoiceDTO
+    {
+        public int PatientId { get; set; }
+        public int DoctorId { get; set; }
+        public DateTime Date { get; set; }
+        public string PaymentMethod { get; set; }
+        public DateTime? PaymentDate { get; set; }
+        public decimal AmountPaid { get; set; }
+
+        public List<ServiceDTO> Services { get; set; }
+        public List<ChargeDTO> Charges { get; set; }
     }
 
     public class CreateInvoiceDTO
@@ -167,6 +181,7 @@ namespace HealthcareManagementSystem.DTOs
 
     public class ServiceDTO
     {
+        public int Id { get; set; }
         public string Description { get; set; }
         public string Code { get; set; }
         public int Quantity { get; set; }
@@ -184,6 +199,7 @@ namespace HealthcareManagementSystem.DTOs
 
     public class ChargeDTO
     {
+        public int Id { get; set; }
         public string Description { get; set; }
         public string Code { get; set; }
         public int Quantity { get; set; }
