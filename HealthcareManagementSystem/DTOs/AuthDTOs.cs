@@ -214,4 +214,32 @@ namespace HealthcareManagementSystem.DTOs
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
     }
+
+    public class MedicalRecordDTO
+    {
+        public int MedicalRecordId { get; set; }
+        public int PatientId { get; set; }
+        public string PatientName { get; set; }
+        public DateTime Date { get; set; }
+        public string Diagnosis { get; set; }
+        public string Treatment { get; set; }
+        public string Notes { get; set; }
+    }
+
+    public class CreateMedicalRecordDTO
+    {
+        public int PatientId { get; set; }
+        public DateTime Date { get; set; }
+        public string Diagnosis { get; set; }
+        public string Treatment { get; set; }
+        public string Notes { get; set; }
+    }
+
+    public class UpdateMedicalRecordDTO
+    {
+        public DateTime Date { get; set; }
+        public string Diagnosis { get; set; }
+        public string Treatment { get; set; }
+        public string Notes { get; set; }
+    }
 }

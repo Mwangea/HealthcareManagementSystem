@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HealthcareManagementSystem.Models.MedicalModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace HealthcareManagementSystem.Data
 {
@@ -53,6 +54,8 @@ namespace HealthcareManagementSystem.Data
 
         [MaxLength(200)]
         public string Pat_discharge_status { get; set; }
+
+        public ICollection<MedicalRecord> MedicalRecords { get; set; }
     }
 
    

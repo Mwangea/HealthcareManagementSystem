@@ -103,7 +103,7 @@ namespace HealthcareManagementSystem.Servives.InvoiceServices
                 Id = invoice.Invoice_id,
                 PatientId = invoice.PatientId,
                 DoctorId = invoice.DoctorId,
-                PatientName = $"{patient.Pat_fname} {patient.Pat_lname}",  // Combine first and last name
+                PatientName = $"{patient.Pat_fname} {patient.Pat_lname}",  
                 Date = invoice.Date,
                 InvoiceNumber = invoice.InvoiceNumber,
                 Subtotal = invoice.Subtotal,
