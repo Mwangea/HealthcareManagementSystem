@@ -5,7 +5,7 @@ using HealthcareManagementSystem.Servives.AdminService;
 using HealthcareManagementSystem.Servives.AppointmentService;
 using HealthcareManagementSystem.Servives.DoctorService;
 using HealthcareManagementSystem.Servives.InvoiceServices;
-using HealthcareManagementSystem.Servives.LabaratoryService;
+//using HealthcareManagementSystem.Servives.LabaratoryService;
 using HealthcareManagementSystem.Servives.LaboratoryService;
 using HealthcareManagementSystem.Servives.MedicalService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

@@ -4,7 +4,7 @@ namespace HealthcareManagementSystem.Models.LabModel
 {
     public class Lab
     {
-        public int Lid { get; set; }
+        public int Id { get; set; }
         public int PatientId { get; set; }
         public string LabPatientName { get; set; }
         public string LabPatAilment { get; set; }
