@@ -5,6 +5,8 @@ using HealthcareManagementSystem.Servives.AdminService;
 using HealthcareManagementSystem.Servives.AppointmentService;
 using HealthcareManagementSystem.Servives.DoctorService;
 using HealthcareManagementSystem.Servives.InvoiceServices;
+using HealthcareManagementSystem.Servives.LabaratoryService;
+using HealthcareManagementSystem.Servives.LaboratoryService;
 using HealthcareManagementSystem.Servives.MedicalService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -72,6 +74,7 @@ namespace HealthcareManagementSystem
             services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<IMedicalService, MedicalService>();
+            services.AddScoped<ILaboratoryService, LaboratoryService>();
 
         }
 

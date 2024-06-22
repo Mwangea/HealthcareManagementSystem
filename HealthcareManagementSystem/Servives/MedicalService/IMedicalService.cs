@@ -7,5 +7,13 @@ namespace HealthcareManagementSystem.Servives.MedicalService
     {
         Task<MedicalRecordDTO> AddMedicalRecordAsync(CreateMedicalRecordDTO createMedicalRecord);
         Task<List<MedicalRecordDTO>> GetMedicalRecordsByPatientIdAsync(int patientId);
+
+        Task<MedicalRecordDTO> GetMedicalRecordByIdAsync(int id);
+
+        Task<List<MedicalRecordDTO>> GetAllMedicalRecordsAsync();
+
+        Task<MedicalRecordDTO> UpdateMedicalRecordAsync(int id, UpdateMedicalRecordDTO updateMedicalRecord);
+
+        Task<bool> DeleteMedicalRecordAsync(int id);
     }
 }

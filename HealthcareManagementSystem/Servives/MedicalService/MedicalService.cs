@@ -1,6 +1,7 @@
 ﻿using HealthcareManagementSystem.Data;
 using HealthcareManagementSystem.DTOs;
 using HealthcareManagementSystem.Models.MedicalModel;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace HealthcareManagementSystem.Servives.MedicalService
@@ -46,8 +47,57 @@ namespace HealthcareManagementSystem.Servives.MedicalService
             };
         }
 
+
+        public async Task<MedicalRecordDTO> GetMedicalRecordByIdAsync(int id)
+        {
+            var medicalRecords = await _context.MedicalRecords
+                //.Include(m => m.PatientId)
+                .Include(m => m.Patient)
+                .FirstOrDefaultAsync(m => m.MedicalRecordId == id);
+
+            if (medicalRecords == null)
+            {
+                throw new KeyNotFoundException("The specified Medical Record does not exist");
+            }
+
+            return new MedicalRecordDTO
+            {
+                MedicalRecordId = medicalRecords.MedicalRecordId,
+                PatientId = medicalRecords.PatientId,
+                PatientName = $"{medicalRecords.Patient.Pat_fname} {medicalRecords.Patient.Pat_lname}",
+                Date = medicalRecords.Date,
+                Diagnosis = medicalRecords.Diagnosis,
+                Treatment = medicalRecords.Treatment,
+                Notes = medicalRecords.Notes
+            };
+        }
+
+        public async Task<List<MedicalRecordDTO>> GetAllMedicalRecordsAsync()
+        {
+            var medicalRecords = await _context.MedicalRecords
+                .Include(m => m.Patient)
+                .ToListAsync();
+
+            return medicalRecords.Select(m => new MedicalRecordDTO
+            {
+                MedicalRecordId = m.MedicalRecordId,
+                PatientId = m.PatientId,
+                PatientName = $"{m.Patient.Pat_fname} {m.Patient.Pat_lname}",
+                Date = m.Date,
+                Diagnosis = m.Diagnosis,
+                Treatment = m.Treatment,
+                Notes = m.Notes,
+            }).ToList();
+        }
+
         public async Task<List<MedicalRecordDTO>> GetMedicalRecordsByPatientIdAsync(int id)
         {
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Pat_id == id);
+            if (patient == null)
+            {
+                throw new KeyNotFoundException("Patient not found");
+            }
+
             var medicalRecords = await _context.MedicalRecords
                 .Where(m => m.PatientId == id)
                 .Include(m => m.Patient)
@@ -57,14 +107,60 @@ namespace HealthcareManagementSystem.Servives.MedicalService
             {
               MedicalRecordId = m.MedicalRecordId,
               PatientId = m.PatientId,
-                PatientName = $"{m.Patient.Pat_fname} {m.Patient.Pat_lname}",
-                Date = m.Date,
+              PatientName = $"{m.Patient.Pat_fname} {m.Patient.Pat_lname}",
+              Date = m.Date,
               Diagnosis = m.Diagnosis,
               Treatment = m.Treatment, 
               Notes = m.Notes,
             }).ToList();
 
-            //return medicalRecords;
+    
         }
+
+        public async Task<MedicalRecordDTO> UpdateMedicalRecordAsync(int id, UpdateMedicalRecordDTO updateMedicalRecord)
+        {
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Pat_id == id);
+
+            var medicalRecord = await _context.MedicalRecords.FindAsync(id);
+            if (medicalRecord == null)
+            {
+                throw new InvalidOperationException("The specified Medical Record does not exist");
+            }
+
+            medicalRecord.Date = updateMedicalRecord.Date;
+            medicalRecord.Diagnosis = updateMedicalRecord.Diagnosis;
+            medicalRecord.Treatment = updateMedicalRecord.Treatment;
+            medicalRecord.Notes = updateMedicalRecord.Notes;
+
+            _context.MedicalRecords.Update(medicalRecord);
+            await _context.SaveChangesAsync();
+
+            return new MedicalRecordDTO
+            {
+                MedicalRecordId = medicalRecord.MedicalRecordId,
+                PatientId = medicalRecord.PatientId,
+                PatientName = $"{patient.Pat_fname} {patient.Pat_lname}",
+                Date = medicalRecord.Date,
+                Diagnosis = medicalRecord.Diagnosis,
+                Treatment = medicalRecord.Treatment,
+                Notes = medicalRecord.Notes,
+
+            };
+        }
+
+        public async Task<bool> DeleteMedicalRecordAsync(int id)
+        {
+            var medicalRecords = await _context.MedicalRecords.FindAsync(id);
+            if (medicalRecords == null)
+            {
+                return false;
+            }
+
+            _context.MedicalRecords.Remove(medicalRecords);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+
     }
 }

@@ -242,4 +242,30 @@ namespace HealthcareManagementSystem.DTOs
         public string Treatment { get; set; }
         public string Notes { get; set; }
     }
+
+    public class LabTestDTO
+    {
+        public int Id { get; set; }
+        public int PatientId { get; set; }
+        public string PatientName { get; set; }
+        public string TestName { get; set; }
+        public DateTime Date { get; set; }
+        public string Result { get; set; }
+        public string Status { get; set; }
+    }
+
+    public class CreateLabTestDTO
+    {
+        public int PatientId { get; set; }
+        public string TestName { get; set; }
+        public DateTime Date { get; set; }
+        public string Result { get; set; }
+        public string Status { get; set; }
+    }
+
+    public class UpdateLabTestDTO
+    {
+        public string Result { get; set; }
+        public string Status { get; set; }
+    }
 }
