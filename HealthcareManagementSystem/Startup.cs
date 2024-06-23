@@ -8,6 +8,7 @@ using HealthcareManagementSystem.Servives.InvoiceServices;
 //using HealthcareManagementSystem.Servives.LabaratoryService;
 using HealthcareManagementSystem.Servives.LaboratoryService;
 using HealthcareManagementSystem.Servives.MedicalService;
+using HealthcareManagementSystem.Servives.MedicineService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -75,6 +76,7 @@ namespace HealthcareManagementSystem
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<IMedicalService, MedicalService>();
             services.AddScoped<ILaboratoryService, LaboratoryService>();
+            services.AddScoped<IMedicineService, MedicineService>();
 
         }
 

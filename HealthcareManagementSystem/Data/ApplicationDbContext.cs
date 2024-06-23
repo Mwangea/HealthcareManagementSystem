@@ -1,6 +1,7 @@
 ﻿using HealthcareManagementSystem.Models.Invoicemodel;
 using HealthcareManagementSystem.Models.LabModel;
 using HealthcareManagementSystem.Models.MedicalModel;
+using HealthcareManagementSystem.Models.MedicineModel;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;
 
@@ -21,6 +22,7 @@ namespace HealthcareManagementSystem.Data
         //public DbSet<Report> Reports { get; set; }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
         public DbSet<Lab> LabTests { get; set;  }
+        public DbSet<Medicine> Medicines { get; set; }
         //public DbSet<Surgery> Surgeries { get; set; }
         //public DbSet<Employee> Employees { get; set; }
         //public DbSet<Payroll> Payrolls { get; set; }
