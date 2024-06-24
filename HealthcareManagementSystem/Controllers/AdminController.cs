@@ -4,6 +4,7 @@ using HealthcareManagementSystem.Servives.AdminService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HealthcareManagementSystem.Servives.DoctorService;
+using Microsoft.AspNetCore.Authentication;
 
 namespace HealthcareManagementSystem.Controllers
 {
@@ -33,7 +34,15 @@ namespace HealthcareManagementSystem.Controllers
             return Ok(response);
         }
 
-       
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+         
+
+            return Ok(new { message = "Logged out successfully" });
+        }
+
+
 
         [HttpGet("doctors")]
         [Authorize(Policy = "Admin")]

@@ -82,5 +82,96 @@ namespace HealthcareManagementSystem.Servives.MedicineService
                 }).ToListAsync();
         }
 
+        public async Task<MedicineDTO> GetMedicineByIdAsync(int id)
+        {
+            var medicines = await _context.Medicines.FindAsync(id);
+
+            if (medicines == null)
+            {
+                throw new KeyNotFoundException("The specified medicine doent not exist");
+            }
+
+            return new MedicineDTO
+            {
+                Id = id,
+                ProductName = medicines.ProductName,
+                Type = medicines.Type,
+                PricePerPack = medicines.PricePerPack,
+                Stock = medicines.Stock,
+                ExpiryDate = medicines.ExpiryDate,
+                Manufacturer = medicines.Manufacturer,
+
+            };
+        }
+
+        public async Task<MedicineDTO> BuyMedicineAsync(int id, int quantity)
+        {
+            var medicine = await _context.Medicines.FindAsync(id);
+            if (medicine == null)
+            {
+                throw new KeyNotFoundException("The specified Medicine does not exist");
+            }
+
+            if (medicine.Stock < quantity)
+            {
+                throw new InvalidOperationException("Not enough stock available");
+            }
+
+            medicine.Stock -= quantity;
+
+            _context.Medicines.Update(medicine);
+            await _context.SaveChangesAsync();
+
+            return new MedicineDTO
+            {
+                Id = medicine.Id,
+                ProductName = medicine.ProductName,
+                Type = medicine.Type,
+                PricePerPack = medicine.PricePerPack,
+                Stock = medicine.Stock,
+                ExpiryDate = medicine.ExpiryDate,
+                Manufacturer = medicine.Manufacturer
+            };
+        }
+
+        public async Task<MedicineDTO> UpdateMedicineAsync(int id, UpdateMedicineDTO updateMedicineDTO)
+        {
+            var medicine = await _context.Medicines.FindAsync(id);
+            if (medicine == null)
+            {
+                throw new KeyNotFoundException("The specified Medicine does not exist");
+            }
+
+            medicine.ProductName = updateMedicineDTO.ProductName;
+            medicine.Type = updateMedicineDTO.Type;
+            medicine.PricePerPack = updateMedicineDTO.PricePerPack;
+            medicine.Stock = updateMedicineDTO.Stock;
+            medicine.ExpiryDate = updateMedicineDTO.ExpiryDate;
+            medicine.Manufacturer = updateMedicineDTO.Manufacturer;
+
+            _context.Medicines.Update(medicine);
+            await _context.SaveChangesAsync();
+
+            return new MedicineDTO
+            {
+                Id = medicine.Id,
+                ProductName = medicine.ProductName,
+                Type = medicine.Type,
+                PricePerPack = medicine.PricePerPack,
+                Stock = medicine.Stock,
+                ExpiryDate = medicine.ExpiryDate,
+                Manufacturer = medicine.Manufacturer
+            };
+        }
+
+        public async Task DeleteMedicineAsync(int id)
+        {
+            var medicine = await _context.Medicines.FindAsync(id);
+            if (medicine != null)
+            {
+                _context.Medicines.Remove(medicine);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
