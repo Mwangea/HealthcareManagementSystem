@@ -11,6 +11,7 @@ using HealthcareManagementSystem.Servives.MedicalService;
 using HealthcareManagementSystem.Servives.MedicineService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -28,6 +29,16 @@ namespace HealthcareManagementSystem
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularDevServer",
+                   builder =>
+                   {
+                       builder.WithOrigins("http://localhost:4200")
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                   });
+            });
             services.AddControllers();
             // Configure DbContext with MySQL
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -88,6 +99,7 @@ namespace HealthcareManagementSystem
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("AllowAngularDevServer");
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
