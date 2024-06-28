@@ -39,12 +39,12 @@ export class RegisterComponent {
         Email: this._regform.value.Email as string,
         Specialty: this._regform.value.Specialty as string
       }
-      console.log('Data being sent to backend:', _obj);
+     // console.log('Data being sent to backend:', _obj);
 
       this.service.Doctorregistration(_obj).subscribe(item => {
         this._response = item;
-        console.log('Response from backend:', this._response);
-        if (this._response.result === 'Ok') {
+        //console.log('Response from backend:', this._response);
+        if (this._response.message === 'Registration Successful') {
           this.toastr.success('Registration successful!', 'Success');
           this.router.navigateByUrl('/login');
         } else {
