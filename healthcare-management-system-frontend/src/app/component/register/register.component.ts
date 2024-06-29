@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
   standalone: true,
   imports: [ReactiveFormsModule, MaterialModule, CommonModule, RouterLink],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
 
@@ -48,7 +48,7 @@ export class RegisterComponent {
           this.toastr.success('Registration successful!', 'Success');
           this.router.navigateByUrl('/login');
         } else {
-          this.toastr.error('Registration failed: ' + this._response.message, 'Error');
+          this.toastr.error('Registration failed');
         }
       }
       );

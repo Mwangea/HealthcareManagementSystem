@@ -4,3 +4,9 @@ export interface doctorRegister{
   Email: string,
   Specialty: string
 }
+
+export interface LoginForm {
+  Username: string;
+  Password: string;
+  role: 'admin' | 'doctor'; // Assuming these are the only roles available
+}
