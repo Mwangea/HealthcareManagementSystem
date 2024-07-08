@@ -18,7 +18,7 @@ namespace HealthcareManagementSystem.Controllers
         }
 
         [HttpGet]
-       [Authorize(Policy = "Doctor,Admin")]
+        [Authorize(Policy = "Doctor,Admin")]
         public async Task<ActionResult<List<Patient>>> GetPatients()
         {
             return await _patientService.GetAllPatientsAsync();

@@ -54,8 +54,10 @@ namespace HealthcareManagementSystem.Data
 
         [MaxLength(200)]
         public string Pat_discharge_status { get; set; }
+        public string Pat_blood_group { get; set; }
+        public string Gender { get; set; }
 
-        public ICollection<MedicalRecord> MedicalRecords { get; set; }
+       // public ICollection<MedicalRecord> MedicalRecords { get; set; }
     }
 
    
