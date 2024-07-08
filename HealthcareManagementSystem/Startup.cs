@@ -1,8 +1,11 @@
 ﻿using HealthcareManagementSystem.Data;
 using HealthcareManagementSystem.Services;
+using HealthcareManagementSystem.Services.AppointmentService;
 using HealthcareManagementSystem.Servives;
 using HealthcareManagementSystem.Servives.AdminService;
 using HealthcareManagementSystem.Servives.AppointmentService;
+
+//using HealthcareManagementSystem.Servives.AppointmentService;
 using HealthcareManagementSystem.Servives.DoctorService;
 using HealthcareManagementSystem.Servives.InvoiceServices;
 //using HealthcareManagementSystem.Servives.LabaratoryService;

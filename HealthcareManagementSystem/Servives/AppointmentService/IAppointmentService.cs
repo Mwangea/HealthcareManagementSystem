@@ -9,6 +9,7 @@ namespace HealthcareManagementSystem.Servives.AppointmentService
         Task<AppointmentResponse> GetAppointmentByIdAsync(int id);
         Task<AppointmentResponse> UpdateAppointmentAsync(int id, CreateAppointmentRequest updateAppointmentRequest);
         Task<bool> DeleteAppointmentAsync(int id);
+        Task<List<AppointmentResponse>> GetAppointmentsByDoctorAsync(int doctorId);
 
     }
 }

@@ -1,8 +1,10 @@
-﻿using HealthcareManagementSystem.Servives.AppointmentService;
+﻿//using HealthcareManagementSystem.Services.AppointmentService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using HealthcareManagementSystem.DTOs;
 using HealthcareManagementSystem.Data;
+using System.Security.Claims;
+using HealthcareManagementSystem.Servives.AppointmentService;
 
 namespace HealthcareManagementSystem.Controllers
 {
@@ -30,19 +32,30 @@ namespace HealthcareManagementSystem.Controllers
             }
             catch (Exception)
             {
-               
                 return StatusCode(500, new { message = "Doctor not found" });
             }
-
         }
 
         [HttpGet]
-        [Authorize(Policy = "Doctor,Admin")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<List<AppointmentResponse>>> GetAllAppointments()
         {
             var appointments = await _appointmentService.GetAllAppointmentsAsync();
             return Ok(appointments);
         }
+
+        [HttpGet("doctor/{doctorId}")]
+        [Authorize(Policy = "Doctor,Admin")]
+        public async Task<ActionResult<List<AppointmentResponse>>> GetAppointmentsByDoctor(int doctorId)
+        {
+            var appointments = await _appointmentService.GetAppointmentsByDoctorAsync(doctorId);
+            if (!appointments.Any())
+            {
+                return NotFound();
+            }
+            return Ok(appointments);
+        }
+
 
         [HttpGet("{id}")]
         [Authorize(Policy = "Doctor,Admin")]
@@ -50,7 +63,7 @@ namespace HealthcareManagementSystem.Controllers
         {
             var appointment = await _appointmentService.GetAppointmentByIdAsync(id);
 
-            if(appointment == null)
+            if (appointment == null)
             {
                 return NotFound();
             }
@@ -68,12 +81,11 @@ namespace HealthcareManagementSystem.Controllers
                 return NotFound();
             }
 
-            return Ok( new { message = "updated successfully", updatedAppointment });
+            return Ok(new { message = "updated successfully", updatedAppointment });
         }
 
         [HttpDelete("{id}")]
         [Authorize(Policy = "Doctor,Admin")]
-
         public async Task<IActionResult> DeleteAppointment(int id)
         {
             var success = await _appointmentService.DeleteAppointmentAsync(id);
