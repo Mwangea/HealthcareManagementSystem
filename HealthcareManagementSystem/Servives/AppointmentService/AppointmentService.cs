@@ -22,6 +22,7 @@ namespace HealthcareManagementSystem.Services.AppointmentService
         {
             var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Username == request.PatientUsername);
             var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Username == request.DoctorUsername);
+            var appointmentDateTime = request.DateOnly.Date + request.TimeOnly;
 
             if (patient == null || doctor == null)
             {
@@ -32,7 +33,7 @@ namespace HealthcareManagementSystem.Services.AppointmentService
             {
                 PatientId = patient.Pat_id,
                 DoctorId = doctor.Id,
-                AppointmentDate = request.AppointmentDate,
+                AppointmentDate = appointmentDateTime,
                 Status = "Pending",
                 Notes = request.Notes
             };
@@ -40,12 +41,16 @@ namespace HealthcareManagementSystem.Services.AppointmentService
             _context.Appointments.Add(appointment);
             await _context.SaveChangesAsync();
 
+            var appointmentDate = appointmentDateTime.Date;
+            var appointmentTime = appointmentDateTime.TimeOfDay;
+
             return new AppointmentResponse
             {
                 Id = appointment.Id,
                 PatientId = appointment.PatientId,
                 DoctorId = appointment.DoctorId,
-                AppointmentDate = appointment.AppointmentDate,
+                Date = appointmentDate,  
+                Time = appointmentTime,
                 Status = appointment.Status,
                 Notes = appointment.Notes,
                 PatientName = patient.Username,
@@ -72,6 +77,8 @@ namespace HealthcareManagementSystem.Services.AppointmentService
                 PatientId = appointment.PatientId,
                 DoctorId = appointment.DoctorId,
                 AppointmentDate = appointment.AppointmentDate,
+                Date = appointment.AppointmentDate.Date,
+                Time = appointment.AppointmentDate.TimeOfDay,
                 Status = appointment.Status,
                 Notes = appointment.Notes
             };
@@ -112,6 +119,8 @@ namespace HealthcareManagementSystem.Services.AppointmentService
                     PatientId = a.PatientId,
                     DoctorId = a.DoctorId,
                     AppointmentDate = a.AppointmentDate,
+                    Date = a.AppointmentDate.Date,
+                    Time = a.AppointmentDate.TimeOfDay,
                     Status = a.Status,
                     Notes = a.Notes,
                     PatientName = a.Patient != null ? a.Patient.Username : "Unknown",
@@ -130,6 +139,8 @@ namespace HealthcareManagementSystem.Services.AppointmentService
                     PatientId = a.PatientId,
                     DoctorId = a.DoctorId,
                     AppointmentDate = a.AppointmentDate,
+                    Date = a.AppointmentDate.Date,
+                    Time = a.AppointmentDate.TimeOfDay,
                     Status = a.Status,
                     Notes = a.Notes,
                     PatientName = a.Patient != null ? a.Patient.Username : "Unknown",
@@ -167,6 +178,8 @@ namespace HealthcareManagementSystem.Services.AppointmentService
                 PatientId = appointment.PatientId,
                 DoctorId = appointment.DoctorId,
                 AppointmentDate = appointment.AppointmentDate,
+                Date = appointment.AppointmentDate.Date,
+                Time = appointment.AppointmentDate.TimeOfDay,
                 Status = appointment.Status,
                 Notes = appointment.Notes,
                 PatientName = patient.Username,

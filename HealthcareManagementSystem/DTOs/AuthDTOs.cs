@@ -128,6 +128,9 @@ namespace HealthcareManagementSystem.DTOs
 
         public string Notes { get; set; }
 
+        public DateTime DateOnly { get; set; }
+        public TimeSpan TimeOnly { get; set; }
+
 
     }
 
@@ -141,6 +144,8 @@ namespace HealthcareManagementSystem.DTOs
         public string Notes { get; set; }
         public string PatientName { get; set; }
         public string DoctorName { get; set; }
+        public DateTime Date { get; set; }
+        public TimeSpan Time { get; set; }
     }
 
     public class InvoiceDTO

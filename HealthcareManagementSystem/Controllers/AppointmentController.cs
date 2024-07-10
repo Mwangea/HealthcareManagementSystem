@@ -21,6 +21,8 @@ namespace HealthcareManagementSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "Doctor,Admin")]
+
         public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointmentRequest request)
         {
             if (!ModelState.IsValid)
@@ -33,6 +35,8 @@ namespace HealthcareManagementSystem.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = "Doctor,Admin")]
+
         public async Task<IActionResult> GetAppointmentById(int id)
         {
             var response = await _appointmentService.GetAppointmentByIdAsync(id);
@@ -45,6 +49,8 @@ namespace HealthcareManagementSystem.Controllers
         }
 
         [HttpGet("doctor/{doctorId}")]
+        [Authorize(Policy = "Doctor")]
+
         public async Task<IActionResult> GetAppointmentsByDoctor(int doctorId)
         {
             var response = await _appointmentService.GetAppointmentsByDoctorAsync(doctorId);
@@ -52,6 +58,7 @@ namespace HealthcareManagementSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> GetAllAppointments()
         {
             var response = await _appointmentService.GetAllAppointmentsAsync();
@@ -59,6 +66,7 @@ namespace HealthcareManagementSystem.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "Doctor,Admin")]
         public async Task<IActionResult> UpdateAppointment(int id, [FromBody] CreateAppointmentRequest request)
         {
             if (!ModelState.IsValid)
@@ -76,6 +84,7 @@ namespace HealthcareManagementSystem.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "Doctor,Admin")]
         public async Task<IActionResult> DeleteAppointment(int id)
         {
             var result = await _appointmentService.DeleteAppointmentAsync(id);
