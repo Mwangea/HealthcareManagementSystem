@@ -103,7 +103,7 @@ namespace HealthcareManagementSystem.Servives.InvoiceServices
                 Id = invoice.Invoice_id,
                 PatientId = invoice.PatientId,
                 DoctorId = invoice.DoctorId,
-                PatientName = $"{patient.Pat_fname} {patient.Pat_lname}",  
+                PatientName = $"{patient.Username}",  
                 Date = invoice.Date,
                 InvoiceNumber = invoice.InvoiceNumber,
                 Subtotal = invoice.Subtotal,
@@ -155,7 +155,7 @@ namespace HealthcareManagementSystem.Servives.InvoiceServices
                     Id = invoice.Invoice_id,
                     PatientId = invoice.PatientId,
                     DoctorId = invoice.DoctorId,
-                    PatientName = $"{patient.Pat_fname} {patient.Pat_lname}",  // Combine first and last name
+                    PatientName = $"{patient.Username}",  // Combine first and last name
                     Date = invoice.Date,
                     InvoiceNumber = invoice.InvoiceNumber,
                     Subtotal = invoice.Subtotal,
@@ -289,7 +289,7 @@ namespace HealthcareManagementSystem.Servives.InvoiceServices
                 Id = invoice.Invoice_id,
                 PatientId = invoice.PatientId,
                 DoctorId = invoice.DoctorId,
-                PatientName = $"{patient.Pat_fname} {patient.Pat_lname}",
+                PatientName = $"{patient.Username}",
                 Date = invoice.Date,
                 InvoiceNumber = invoice.InvoiceNumber,
                 Subtotal = invoice.Subtotal,

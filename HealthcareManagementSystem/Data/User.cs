@@ -20,16 +20,8 @@ namespace HealthcareManagementSystem.Data
         [Key]
         public int Pat_id { get; set; }
 
-        [Required]
         [MaxLength(200)]
-        public string Pat_fname { get; set; }
-
-        [Required]
-        [MaxLength(200)]
-        public string Pat_lname { get; set; }
-
-        [MaxLength(200)]
-        public string Pat_dob { get; set; }
+        public string? Pat_dob { get; set; }
 
         [MaxLength(200)]
         public string Pat_age { get; set; }
@@ -56,8 +48,10 @@ namespace HealthcareManagementSystem.Data
         public string Pat_discharge_status { get; set; }
         public string Pat_blood_group { get; set; }
         public string Gender { get; set; }
+        [MaxLength(100)]  // Adjust max length as needed
+        public string Username { get; set; }
 
-       // public ICollection<MedicalRecord> MedicalRecords { get; set; }
+        // public ICollection<MedicalRecord> MedicalRecords { get; set; }
     }
 
    

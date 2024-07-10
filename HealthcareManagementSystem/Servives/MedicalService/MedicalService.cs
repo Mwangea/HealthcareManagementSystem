@@ -38,7 +38,7 @@ namespace HealthcareManagementSystem.Servives.MedicalService
             {
                 MedicalRecordId = medicalRecord.MedicalRecordId,
                 PatientId = medicalRecord.PatientId,
-                PatientName = $"{patient.Pat_fname} {patient.Pat_lname}",
+                PatientName =medicalRecord.Patient.Username,
                 Date = medicalRecord.Date,
                 Diagnosis = medicalRecord.Diagnosis,
                 Treatment = medicalRecord.Treatment,
@@ -64,7 +64,7 @@ namespace HealthcareManagementSystem.Servives.MedicalService
             {
                 MedicalRecordId = medicalRecords.MedicalRecordId,
                 PatientId = medicalRecords.PatientId,
-                PatientName = $"{medicalRecords.Patient.Pat_fname} {medicalRecords.Patient.Pat_lname}",
+                PatientName =medicalRecords.Patient.Username,
                 Date = medicalRecords.Date,
                 Diagnosis = medicalRecords.Diagnosis,
                 Treatment = medicalRecords.Treatment,
@@ -82,7 +82,7 @@ namespace HealthcareManagementSystem.Servives.MedicalService
             {
                 MedicalRecordId = m.MedicalRecordId,
                 PatientId = m.PatientId,
-                PatientName = $"{m.Patient.Pat_fname} {m.Patient.Pat_lname}",
+                PatientName = m.Patient.Username,
                 Date = m.Date,
                 Diagnosis = m.Diagnosis,
                 Treatment = m.Treatment,
@@ -107,7 +107,7 @@ namespace HealthcareManagementSystem.Servives.MedicalService
             {
               MedicalRecordId = m.MedicalRecordId,
               PatientId = m.PatientId,
-              PatientName = $"{m.Patient.Pat_fname} {m.Patient.Pat_lname}",
+              PatientName = m.Patient.Username,
               Date = m.Date,
               Diagnosis = m.Diagnosis,
               Treatment = m.Treatment, 
@@ -139,7 +139,7 @@ namespace HealthcareManagementSystem.Servives.MedicalService
             {
                 MedicalRecordId = medicalRecord.MedicalRecordId,
                 PatientId = medicalRecord.PatientId,
-                PatientName = $"{patient.Pat_fname} {patient.Pat_lname}",
+                PatientName = medicalRecord.Patient.Username,
                 Date = medicalRecord.Date,
                 Diagnosis = medicalRecord.Diagnosis,
                 Treatment = medicalRecord.Treatment,

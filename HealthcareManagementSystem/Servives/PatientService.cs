@@ -18,8 +18,9 @@ namespace HealthcareManagementSystem.Servives
                 .Select(p => new Patient
                 {
                     Pat_id = p.Pat_id,
-                    Pat_fname = p.Pat_fname ?? string.Empty,
-                    Pat_lname = p.Pat_lname ?? string.Empty,
+                    Username = p.Username ?? string.Empty,
+                    //Pat_fname = p.Pat_fname ?? string.Empty,
+                    // Pat_lname = p.Pat_lname ?? string.Empty,
                     Pat_dob = p.Pat_dob ?? string.Empty,
                     Pat_age = p.Pat_age ?? string.Empty,
                     Pat_number = p.Pat_number ?? string.Empty,

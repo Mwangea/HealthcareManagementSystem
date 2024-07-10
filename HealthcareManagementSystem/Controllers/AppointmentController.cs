@@ -5,95 +5,86 @@ using HealthcareManagementSystem.DTOs;
 using HealthcareManagementSystem.Data;
 using System.Security.Claims;
 using HealthcareManagementSystem.Servives.AppointmentService;
+using HealthcareManagementSystem.Servives.UserService;
 
 namespace HealthcareManagementSystem.Controllers
 {
     [Route("api/appointments")]
     [ApiController]
-    public class AppointmentController : ControllerBase
+    public class AppointmentsController : ControllerBase
     {
         private readonly IAppointmentService _appointmentService;
 
-        public AppointmentController(IAppointmentService appointmentService)
+        public AppointmentsController(IAppointmentService appointmentService)
         {
             _appointmentService = appointmentService;
         }
 
         [HttpPost]
-        [Authorize(Policy = "Doctor,Admin")]
-        public async Task<ActionResult<AppointmentResponse>> CreateAppointment(CreateAppointmentRequest createAppointmentRequest)
+        public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointmentRequest request)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                var response = await _appointmentService.CreateAppointmentAsync(createAppointmentRequest);
-                return CreatedAtAction(nameof(GetAppointmentById),
-                new { id = response.Id },
-                new { message = "Appointment created successfully", response });
+                return BadRequest(ModelState);
             }
-            catch (Exception)
-            {
-                return StatusCode(500, new { message = "Doctor not found" });
-            }
+
+            var response = await _appointmentService.CreateAppointmentAsync(request);
+            return Ok(response);
         }
 
-        [HttpGet]
-        [Authorize(Policy = "Admin")]
-        public async Task<ActionResult<List<AppointmentResponse>>> GetAllAppointments()
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAppointmentById(int id)
         {
-            var appointments = await _appointmentService.GetAllAppointmentsAsync();
-            return Ok(appointments);
+            var response = await _appointmentService.GetAppointmentByIdAsync(id);
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
         }
 
         [HttpGet("doctor/{doctorId}")]
-        [Authorize(Policy = "Doctor,Admin")]
-        public async Task<ActionResult<List<AppointmentResponse>>> GetAppointmentsByDoctor(int doctorId)
+        public async Task<IActionResult> GetAppointmentsByDoctor(int doctorId)
         {
-            var appointments = await _appointmentService.GetAppointmentsByDoctorAsync(doctorId);
-            if (!appointments.Any())
-            {
-                return NotFound();
-            }
-            return Ok(appointments);
+            var response = await _appointmentService.GetAppointmentsByDoctorAsync(doctorId);
+            return Ok(response);
         }
 
-
-        [HttpGet("{id}")]
-        [Authorize(Policy = "Doctor,Admin")]
-        public async Task<ActionResult<AppointmentResponse>> GetAppointmentById(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetAllAppointments()
         {
-            var appointment = await _appointmentService.GetAppointmentByIdAsync(id);
-
-            if (appointment == null)
-            {
-                return NotFound();
-            }
-            return Ok(appointment);
+            var response = await _appointmentService.GetAllAppointmentsAsync();
+            return Ok(response);
         }
 
         [HttpPut("{id}")]
-        [Authorize(Policy = "Doctor,Admin")]
-        public async Task<ActionResult<AppointmentResponse>> UpdateAppointment(int id, CreateAppointmentRequest updateAppointmentRequest)
+        public async Task<IActionResult> UpdateAppointment(int id, [FromBody] CreateAppointmentRequest request)
         {
-            var updatedAppointment = await _appointmentService.UpdateAppointmentAsync(id, updateAppointmentRequest);
-
-            if (updatedAppointment == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
-            return Ok(new { message = "updated successfully", updatedAppointment });
+            var response = await _appointmentService.UpdateAppointmentAsync(id, request);
+            if (response == null)
+            {
+                return NotFound(new { message = "Appoinment not found" });
+            }
+
+            return Ok(new { message = "Appointment updated successfully", response });
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = "Doctor,Admin")]
         public async Task<IActionResult> DeleteAppointment(int id)
         {
-            var success = await _appointmentService.DeleteAppointmentAsync(id);
-            if (!success)
+            var result = await _appointmentService.DeleteAppointmentAsync(id);
+            if (!result)
             {
                 return NotFound();
             }
-            return Ok(new { message = "deleted successfully" });
+
+            return Ok(new { message = "Deleted successfully" });
         }
     }
 }

@@ -1,7 +1,11 @@
 ﻿using HealthcareManagementSystem.Data;
 using HealthcareManagementSystem.DTOs;
+using HealthcareManagementSystem.Models.MedicalModel;
 using HealthcareManagementSystem.Servives.AppointmentService;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HealthcareManagementSystem.Services.AppointmentService
 {
@@ -14,15 +18,23 @@ namespace HealthcareManagementSystem.Services.AppointmentService
             _context = context;
         }
 
-        public async Task<AppointmentResponse> CreateAppointmentAsync(CreateAppointmentRequest createAppointmentRequest)
+        public async Task<AppointmentResponse> CreateAppointmentAsync(CreateAppointmentRequest request)
         {
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Username == request.PatientUsername);
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Username == request.DoctorUsername);
+
+            if (patient == null || doctor == null)
+            {
+                throw new ArgumentException("Invalid patient or doctor username");
+            }
+
             var appointment = new Appointment
             {
-                PatientId = createAppointmentRequest.PatientId,
-                DoctorId = createAppointmentRequest.DoctorId,
-                AppointmentDate = createAppointmentRequest.AppointmentDate,
-                Status = createAppointmentRequest.Status,
-                Notes = createAppointmentRequest.Notes
+                PatientId = patient.Pat_id,
+                DoctorId = doctor.Id,
+                AppointmentDate = request.AppointmentDate,
+                Status = "Pending",
+                Notes = request.Notes
             };
 
             _context.Appointments.Add(appointment);
@@ -36,8 +48,8 @@ namespace HealthcareManagementSystem.Services.AppointmentService
                 AppointmentDate = appointment.AppointmentDate,
                 Status = appointment.Status,
                 Notes = appointment.Notes,
-                PatientName = $"{appointment.Patient.Pat_fname} {appointment.Patient.Pat_lname}",
-                DoctorName = appointment.Doctor.Username
+                PatientName = patient.Username,
+                DoctorName = doctor.Username
             };
         }
 
@@ -50,21 +62,43 @@ namespace HealthcareManagementSystem.Services.AppointmentService
 
             if (appointment == null)
             {
-                return null;
+                return null;  // Return null if appointment with the given id is not found
             }
 
-            return new AppointmentResponse
+            // Create an AppointmentResponse object with the retrieved data
+            var response = new AppointmentResponse
             {
                 Id = appointment.Id,
                 PatientId = appointment.PatientId,
                 DoctorId = appointment.DoctorId,
                 AppointmentDate = appointment.AppointmentDate,
                 Status = appointment.Status,
-                Notes = appointment.Notes,
-                PatientName = $"{appointment.Patient.Pat_fname} {appointment.Patient.Pat_lname}",
-                DoctorName = appointment.Doctor.Username
+                Notes = appointment.Notes
             };
+
+            // Check if Patient and Doctor are not null before accessing their properties
+            if (appointment.Patient != null)
+            {
+                response.PatientName = appointment.Patient.Username;
+            }
+            else
+            {
+                response.PatientName = "Unknown";  // Handle case where Patient is null
+            }
+
+            if (appointment.Doctor != null)
+            {
+                response.DoctorName = appointment.Doctor.Username;
+            }
+            else
+            {
+                response.DoctorName = "Unknown";  // Handle case where Doctor is null
+            }
+
+            return response;
         }
+
+
 
         public async Task<List<AppointmentResponse>> GetAppointmentsByDoctorAsync(int doctorId)
         {
@@ -80,8 +114,8 @@ namespace HealthcareManagementSystem.Services.AppointmentService
                     AppointmentDate = a.AppointmentDate,
                     Status = a.Status,
                     Notes = a.Notes,
-                    PatientName = $"{a.Patient.Pat_fname} {a.Patient.Pat_lname}",
-                    DoctorName = a.Doctor.Username
+                    PatientName = a.Patient != null ? a.Patient.Username : "Unknown",
+                    DoctorName = a.Doctor != null ? a.Doctor.Username : "Unknown"
                 }).ToListAsync();
         }
 
@@ -98,12 +132,12 @@ namespace HealthcareManagementSystem.Services.AppointmentService
                     AppointmentDate = a.AppointmentDate,
                     Status = a.Status,
                     Notes = a.Notes,
-                    PatientName = $"{a.Patient.Pat_fname} {a.Patient.Pat_lname}",
-                    DoctorName = a.Doctor.Username
+                    PatientName = a.Patient != null ? a.Patient.Username : "Unknown",
+                    DoctorName = a.Doctor != null ? a.Doctor.Username : "Unknown"
                 }).ToListAsync();
         }
 
-        public async Task<AppointmentResponse> UpdateAppointmentAsync(int id, CreateAppointmentRequest updateAppointmentRequest)
+        public async Task<AppointmentResponse> UpdateAppointmentAsync(int id, CreateAppointmentRequest request)
         {
             var appointment = await _context.Appointments.FindAsync(id);
 
@@ -112,11 +146,18 @@ namespace HealthcareManagementSystem.Services.AppointmentService
                 return null;
             }
 
-            appointment.PatientId = updateAppointmentRequest.PatientId;
-            appointment.DoctorId = updateAppointmentRequest.DoctorId;
-            appointment.AppointmentDate = updateAppointmentRequest.AppointmentDate;
-            appointment.Status = updateAppointmentRequest.Status;
-            appointment.Notes = updateAppointmentRequest.Notes;
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Username == request.PatientUsername);
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Username == request.DoctorUsername);
+
+            if (patient == null || doctor == null)
+            {
+                throw new ArgumentException("Invalid patient or doctor username");
+            }
+
+            appointment.PatientId = patient.Pat_id;
+            appointment.DoctorId = doctor.Id;
+            appointment.AppointmentDate = request.AppointmentDate;
+            appointment.Notes = request.Notes;
 
             await _context.SaveChangesAsync();
 
@@ -128,8 +169,8 @@ namespace HealthcareManagementSystem.Services.AppointmentService
                 AppointmentDate = appointment.AppointmentDate,
                 Status = appointment.Status,
                 Notes = appointment.Notes,
-                PatientName = $"{appointment.Patient.Pat_fname} {appointment.Patient.Pat_lname}",
-                DoctorName = appointment.Doctor.Username
+                PatientName = patient.Username,
+                DoctorName = doctor.Username
             };
         }
 

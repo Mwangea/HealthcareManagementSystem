@@ -39,7 +39,7 @@ namespace HealthcareManagementSystem.Servives.LaboratoryService
             var labTest = new Lab
             {
                 PatientId = createLabTest.PatientId,
-                LabPatientName = $"{patient.Pat_fname} {patient.Pat_lname}",
+                LabPatientName = patient.Username,
                 LabPatAilment = createLabTest.LabPatAilment,
                 LabPatNumber = GenerateUniqueNumber(),
                 LabPatTests = createLabTest.LabPatTests,

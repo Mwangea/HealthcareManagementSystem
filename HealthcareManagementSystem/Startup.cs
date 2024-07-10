@@ -8,7 +8,7 @@ using HealthcareManagementSystem.Servives.AppointmentService;
 //using HealthcareManagementSystem.Servives.AppointmentService;
 using HealthcareManagementSystem.Servives.DoctorService;
 using HealthcareManagementSystem.Servives.InvoiceServices;
-//using HealthcareManagementSystem.Servives.LabaratoryService;
+using HealthcareManagementSystem.Servives.UserService;
 using HealthcareManagementSystem.Servives.LaboratoryService;
 using HealthcareManagementSystem.Servives.MedicalService;
 using HealthcareManagementSystem.Servives.MedicineService;
@@ -85,7 +85,10 @@ namespace HealthcareManagementSystem
         services.AddScoped<IInvoiceService, InvoiceService>();
         services.AddScoped<IMedicalService, MedicalService>();
         services.AddScoped<ILaboratoryService, LaboratoryService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IMedicineService, MedicineService>();
+        
+        
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

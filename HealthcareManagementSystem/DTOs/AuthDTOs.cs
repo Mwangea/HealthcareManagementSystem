@@ -115,11 +115,20 @@ namespace HealthcareManagementSystem.DTOs
 
     public class CreateAppointmentRequest
     {
-        public int PatientId { get; set; }
-        public int DoctorId { get; set; }
+        //public int PatientId { get; set; }
+        //public int DoctorId { get; set; }
+        [Required]
+        public string PatientUsername { get; set; }
+
+        [Required]
+        public string DoctorUsername { get; set; }
+
+        [Required]
         public DateTime AppointmentDate { get; set; }
-        public string Status { get; set; }
+
         public string Notes { get; set; }
+
+
     }
 
     public class AppointmentResponse
