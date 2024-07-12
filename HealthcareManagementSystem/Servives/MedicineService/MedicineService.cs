@@ -36,7 +36,7 @@ namespace HealthcareManagementSystem.Servives.MedicineService
                 Type = medicine.Type,
                 PricePerPack = medicine.PricePerPack,
                 Stock = medicine.Stock,
-                ExpiryDate = medicine.ExpiryDate,
+                ExpiryDate = medicine.ExpiryDate.ToString("yyyy-MM-dd"),
                 Manufacturer = medicine.Manufacturer
             };
         }
@@ -61,7 +61,7 @@ namespace HealthcareManagementSystem.Servives.MedicineService
                 Type = medicine.Type,
                 PricePerPack = medicine.PricePerPack,
                 Stock = medicine.Stock,
-                ExpiryDate = medicine.ExpiryDate,
+                ExpiryDate = medicine.ExpiryDate.ToString("yyyy-MM-dd"),
                 Manufacturer = medicine.Manufacturer
             };
         }
@@ -76,7 +76,7 @@ namespace HealthcareManagementSystem.Servives.MedicineService
                     Type = d.Type,
                     PricePerPack = d.PricePerPack,
                     Stock = d.Stock,
-                    ExpiryDate = d.ExpiryDate,
+                    ExpiryDate = d.ExpiryDate.ToString("yyyy-MM-dd"),
                     Manufacturer = d.Manufacturer,
 
                 }).ToListAsync();
@@ -98,7 +98,7 @@ namespace HealthcareManagementSystem.Servives.MedicineService
                 Type = medicines.Type,
                 PricePerPack = medicines.PricePerPack,
                 Stock = medicines.Stock,
-                ExpiryDate = medicines.ExpiryDate,
+                ExpiryDate = medicines.ExpiryDate.ToString("yyyy-MM-dd"),
                 Manufacturer = medicines.Manufacturer,
 
             };
@@ -129,7 +129,7 @@ namespace HealthcareManagementSystem.Servives.MedicineService
                 Type = medicine.Type,
                 PricePerPack = medicine.PricePerPack,
                 Stock = medicine.Stock,
-                ExpiryDate = medicine.ExpiryDate,
+                ExpiryDate = medicine.ExpiryDate.ToString("yyyy-MM-dd"),
                 Manufacturer = medicine.Manufacturer
             };
         }
@@ -159,7 +159,7 @@ namespace HealthcareManagementSystem.Servives.MedicineService
                 Type = medicine.Type,
                 PricePerPack = medicine.PricePerPack,
                 Stock = medicine.Stock,
-                ExpiryDate = medicine.ExpiryDate,
+                ExpiryDate = medicine.ExpiryDate.ToString("yyyy-MM-dd"),
                 Manufacturer = medicine.Manufacturer
             };
         }
@@ -173,5 +173,20 @@ namespace HealthcareManagementSystem.Servives.MedicineService
                 await _context.SaveChangesAsync();
             }
         }
+
+        private MedicineDTO MapToDTO(Medicine medicine)
+        {
+            return new MedicineDTO
+            {
+                Id = medicine.Id,
+                ProductName = medicine.ProductName,
+                Type = medicine.Type,
+                PricePerPack = medicine.PricePerPack,
+                Stock = medicine.Stock,
+                ExpiryDate = medicine.ExpiryDate.ToString("yyyy-MM-dd"), // Format DateTime as needed
+                Manufacturer = medicine.Manufacturer
+            };
+        }
+
     }
 }

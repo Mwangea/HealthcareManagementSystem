@@ -66,7 +66,7 @@ namespace HealthcareManagementSystem.Controllers
             return Ok(doctor);
         }
 
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Doctor,Admin")]
         [HttpPut("doctors/{id}")]
 
         public async Task<IActionResult> UpdateDoctor(int id, [FromBody] DoctorUpdateRequest doctorUpdateRequest)

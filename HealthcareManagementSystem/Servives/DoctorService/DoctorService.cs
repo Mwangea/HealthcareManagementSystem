@@ -92,5 +92,63 @@ namespace HealthcareManagementSystem.Servives.DoctorService
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public async Task<DoctorDT0s> GetDoctorByIdAsync(int id)
+        {
+            var doctor = await _context.Doctors.FindAsync(id);
+
+            if (doctor == null)
+                return null;
+
+            return new DoctorDT0s
+            {
+                Id = doctor.Id,
+                Username = doctor.Username,
+                Email = doctor.Email,
+                Specialty = doctor.Specialty
+            };
+        }
+
+        public async Task<DoctorDT0s> UpdateDoctorAsync(int id, DoctorUpdateRequest request)
+        {
+
+            var doctor = await _context.Doctors.FindAsync(id);
+
+            if (doctor == null)
+                return null;
+
+            doctor.Username = request.Username;
+            doctor.Email = request.Email;
+            doctor.Specialty = request.Specialty;
+
+
+            _context.Doctors.Update(doctor);
+            await _context.SaveChangesAsync();
+
+            return new DoctorDT0s
+            {
+                Id = doctor.Id,
+                Username = doctor.Username,
+                Email = doctor.Email,
+                Specialty = doctor.Specialty,
+
+            };
+
+        }
+
+        public async Task<bool> DeleteDoctorAsync(int id)
+        {
+            var doctor = await _context.Doctors.FindAsync(id);
+
+            if (doctor == null)
+                return false;
+
+            _context.Doctors.Remove(doctor);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+
     }
 }
