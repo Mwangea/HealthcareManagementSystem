@@ -1,15 +1,19 @@
 ﻿using HealthcareManagementSystem.DTOs;
+using HealthcareManagementSystem.Helpers;
 using HealthcareManagementSystem.Models.Invoicemodel;
+using HealthcareManagementSystem.Services.InvoiceServices;
 using HealthcareManagementSystem.Servives.InvoiceServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HealthcareManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class InvoiceController : ControllerBase
-
     {
         private readonly IInvoiceService _invoiceService;
 
@@ -20,16 +24,15 @@ namespace HealthcareManagementSystem.Controllers
 
         [HttpPost]
         [Authorize(Policy = "Doctor,Admin")]
-        public async Task<ActionResult<Invoice>> CreateInvoice([FromBody] CreateInvoiceDTO invoiceDto)
+        public async Task<ActionResult<InvoiceResponse>> CreateInvoice([FromBody] CreateInvoiceDTO invoiceDto)
         {
             try
             {
-                var invoice = await _invoiceService.AddInvoiceAsync(invoiceDto);
-                return Ok(new { message = "Invoice created successfully", invoice });
+                var invoiceResponse = await _invoiceService.AddInvoiceAsync(invoiceDto);
+                return Ok(new { message = "Invoice created successfully", invoiceResponse });
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, new { message = "Invoice not created", error = ex.Message });
             }
         }
@@ -59,14 +62,11 @@ namespace HealthcareManagementSystem.Controllers
         public async Task<IActionResult> UpdateInvoice(int id, UpdateInvoiceDTO updateInvoiceDTO)
         {
             var updatedInvoice = await _invoiceService.UpdateInvoiceAsync(id, updateInvoiceDTO);
+            if (updatedInvoice == null)
             {
-                if (updatedInvoice == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(new { message = "Updated Successfully", updatedInvoice });
+                return NotFound();
             }
+            return Ok(new { message = "Updated Successfully", updatedInvoice });
         }
 
         [HttpDelete("{id}")]
@@ -74,16 +74,71 @@ namespace HealthcareManagementSystem.Controllers
         public async Task<IActionResult> DeleteInvoice(int id)
         {
             var deleted = await _invoiceService.DeleteInvoiceAsync(id);
+            if (deleted)
             {
-                if (deleted)
-                {
-                    return Ok(new { message = "Invoice deleted successfully" });
-                }
-                else
-                {
-                    return NotFound(new { message = " Invoice not found" });
-                }
+                return Ok(new { message = "Invoice deleted successfully" });
+            }
+            else
+            {
+                return NotFound(new { message = "Invoice not found" });
             }
         }
-    } 
+
+        [HttpGet("{id}/download")]
+        public async Task<IActionResult> DownloadInvoice(int id)
+        {
+            var invoiceDto = await _invoiceService.GetInvoiceByIdAsync(id);
+
+            if (invoiceDto == null)
+            {
+                return NotFound();
+            }
+
+            var invoiceResponse = ConvertToInvoiceResponse(invoiceDto);
+
+            var pdfBytes = PdfHelper.GenerateInvoicePdf(invoiceResponse);
+            return File(pdfBytes, "application/pdf", $"Invoice_{invoiceDto.Id}.pdf");
+        }
+
+        private InvoiceResponse ConvertToInvoiceResponse(InvoiceDTO invoiceDto)
+        {
+            var invoice = new Invoice
+            {
+                Invoice_id = invoiceDto.Id,
+                PatientId = invoiceDto.PatientId,
+                DoctorId = invoiceDto.DoctorId,
+                Date = invoiceDto.Date,
+                InvoiceNumber = invoiceDto.InvoiceNumber,
+                Subtotal = invoiceDto.Subtotal,
+                Tax = invoiceDto.Tax,
+                Total = invoiceDto.Total,
+                PaymentMethod = invoiceDto.PaymentMethod,
+                PaymentDate = invoiceDto.PaymentDate,
+                AmountPaid = invoiceDto.AmountPaid,
+                Services = invoiceDto.Services.Select(s => new Service
+                {
+                    Description = s.Description,
+                    Code = s.Code,
+                    Quantity = s.Quantity,
+                    UnitPrice = s.UnitPrice,
+                    Total = s.Total
+                }).ToList(),
+                Charges = invoiceDto.Charges.Select(c => new Charge
+                {
+                    Description = c.Description,
+                    Code = c.Code,
+                    Quantity = c.Quantity,
+                    UnitPrice = c.UnitPrice,
+                    Total = c.Total
+                }).ToList()
+            };
+
+            return new InvoiceResponse
+            {
+                Invoice = invoice,
+                PatientUsername = invoiceDto.PatientName,
+                DoctorUsername = invoiceDto.DoctorUsername
+            };
+        }
+    }
 }

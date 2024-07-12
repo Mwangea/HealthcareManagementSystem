@@ -13,6 +13,8 @@ namespace HealthcareManagementSystem.Models.Invoicemodel
 
             public int PatientId { get; set; }
             public int DoctorId { get; set; }
+           // public string PatientUsername { get; set; }
+           // public string DoctorUsername { get; set; }
             public DateTime Date { get; set; }
             public string InvoiceNumber { get; set; }
             public decimal Subtotal { get; set; }
@@ -26,8 +28,8 @@ namespace HealthcareManagementSystem.Models.Invoicemodel
             public List<Charge> Charges { get; set; }
         }
 
-        public class Service
-    {
+         public class Service
+        {
         [Key]
         public int Service_id { get; set; }
 

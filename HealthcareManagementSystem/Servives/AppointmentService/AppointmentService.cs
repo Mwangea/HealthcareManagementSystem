@@ -3,7 +3,9 @@ using HealthcareManagementSystem.DTOs;
 using HealthcareManagementSystem.Models.MedicalModel;
 using HealthcareManagementSystem.Servives.AppointmentService;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,12 +24,14 @@ namespace HealthcareManagementSystem.Services.AppointmentService
         {
             var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Username == request.PatientUsername);
             var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Username == request.DoctorUsername);
-            var appointmentDateTime = request.DateOnly.Date + request.TimeOnly;
 
-            if (patient == null || doctor == null)
-            {
-                throw new ArgumentException("Invalid patient or doctor username");
-            }
+            if (patient == null)
+                throw new ArgumentException($"Patient with username '{request.PatientUsername}' not found.");
+
+            if (doctor == null)
+                throw new ArgumentException($"Doctor with username '{request.DoctorUsername}' not found.");
+
+            DateTime appointmentDateTime = request.GetAppointmentDateTime();
 
             var appointment = new Appointment
             {
@@ -41,16 +45,14 @@ namespace HealthcareManagementSystem.Services.AppointmentService
             _context.Appointments.Add(appointment);
             await _context.SaveChangesAsync();
 
-            var appointmentDate = appointmentDateTime.Date;
-            var appointmentTime = appointmentDateTime.TimeOfDay;
-
             return new AppointmentResponse
             {
                 Id = appointment.Id,
                 PatientId = appointment.PatientId,
                 DoctorId = appointment.DoctorId,
-                Date = appointmentDate,  
-                Time = appointmentTime,
+                AppointmentDate = appointment.AppointmentDate,
+                Date = appointmentDateTime.ToString("yyyy-MM-dd"),
+                Time = appointmentDateTime.ToString("hh:mm tt", CultureInfo.InvariantCulture),
                 Status = appointment.Status,
                 Notes = appointment.Notes,
                 PatientName = patient.Username,
@@ -66,46 +68,22 @@ namespace HealthcareManagementSystem.Services.AppointmentService
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (appointment == null)
-            {
-                return null;  // Return null if appointment with the given id is not found
-            }
+                return null;
 
-            // Create an AppointmentResponse object with the retrieved data
-            var response = new AppointmentResponse
+            return new AppointmentResponse
             {
                 Id = appointment.Id,
                 PatientId = appointment.PatientId,
                 DoctorId = appointment.DoctorId,
                 AppointmentDate = appointment.AppointmentDate,
-                Date = appointment.AppointmentDate.Date,
-                Time = appointment.AppointmentDate.TimeOfDay,
+                Date = appointment.AppointmentDate.Date.ToString("yyyy-MM-dd"),
+                Time = appointment.AppointmentDate.ToString("hh:mm tt", CultureInfo.InvariantCulture),
                 Status = appointment.Status,
-                Notes = appointment.Notes
+                Notes = appointment.Notes,
+                PatientName = appointment.Patient?.Username ?? "Unknown",
+                DoctorName = appointment.Doctor?.Username ?? "Unknown"
             };
-
-            // Check if Patient and Doctor are not null before accessing their properties
-            if (appointment.Patient != null)
-            {
-                response.PatientName = appointment.Patient.Username;
-            }
-            else
-            {
-                response.PatientName = "Unknown";  // Handle case where Patient is null
-            }
-
-            if (appointment.Doctor != null)
-            {
-                response.DoctorName = appointment.Doctor.Username;
-            }
-            else
-            {
-                response.DoctorName = "Unknown";  // Handle case where Doctor is null
-            }
-
-            return response;
         }
-
-
 
         public async Task<List<AppointmentResponse>> GetAppointmentsByDoctorAsync(int doctorId)
         {
@@ -119,12 +97,12 @@ namespace HealthcareManagementSystem.Services.AppointmentService
                     PatientId = a.PatientId,
                     DoctorId = a.DoctorId,
                     AppointmentDate = a.AppointmentDate,
-                    Date = a.AppointmentDate.Date,
-                    Time = a.AppointmentDate.TimeOfDay,
+                    Date = a.AppointmentDate.Date.ToString("yyyy-MM-dd"),
+                    Time = a.AppointmentDate.ToString("hh:mm tt", CultureInfo.InvariantCulture),
                     Status = a.Status,
                     Notes = a.Notes,
-                    PatientName = a.Patient != null ? a.Patient.Username : "Unknown",
-                    DoctorName = a.Doctor != null ? a.Doctor.Username : "Unknown"
+                    PatientName = a.Patient.Username ?? "Unknown",
+                    DoctorName = a.Doctor.Username ?? "Unknown"
                 }).ToListAsync();
         }
 
@@ -139,12 +117,12 @@ namespace HealthcareManagementSystem.Services.AppointmentService
                     PatientId = a.PatientId,
                     DoctorId = a.DoctorId,
                     AppointmentDate = a.AppointmentDate,
-                    Date = a.AppointmentDate.Date,
-                    Time = a.AppointmentDate.TimeOfDay,
+                    Date = a.AppointmentDate.Date.ToString("yyyy-MM-dd"),
+                    Time = a.AppointmentDate.ToString("hh:mm tt", CultureInfo.InvariantCulture),
                     Status = a.Status,
                     Notes = a.Notes,
-                    PatientName = a.Patient != null ? a.Patient.Username : "Unknown",
-                    DoctorName = a.Doctor != null ? a.Doctor.Username : "Unknown"
+                    PatientName = a.Patient.Username ?? "Unknown",
+                    DoctorName = a.Doctor.Username ?? "Unknown"
                 }).ToListAsync();
         }
 
@@ -153,21 +131,20 @@ namespace HealthcareManagementSystem.Services.AppointmentService
             var appointment = await _context.Appointments.FindAsync(id);
 
             if (appointment == null)
-            {
-                return null;
-            }
+                throw new ArgumentException($"Appointment with ID '{id}' not found.");
 
             var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Username == request.PatientUsername);
             var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Username == request.DoctorUsername);
 
-            if (patient == null || doctor == null)
-            {
-                throw new ArgumentException("Invalid patient or doctor username");
-            }
+            if (patient == null)
+                throw new ArgumentException($"Patient with username '{request.PatientUsername}' not found.");
+
+            if (doctor == null)
+                throw new ArgumentException($"Doctor with username '{request.DoctorUsername}' not found.");
 
             appointment.PatientId = patient.Pat_id;
             appointment.DoctorId = doctor.Id;
-            appointment.AppointmentDate = request.AppointmentDate;
+            appointment.AppointmentDate = request.GetAppointmentDateTime();
             appointment.Notes = request.Notes;
 
             await _context.SaveChangesAsync();
@@ -178,8 +155,8 @@ namespace HealthcareManagementSystem.Services.AppointmentService
                 PatientId = appointment.PatientId,
                 DoctorId = appointment.DoctorId,
                 AppointmentDate = appointment.AppointmentDate,
-                Date = appointment.AppointmentDate.Date,
-                Time = appointment.AppointmentDate.TimeOfDay,
+                Date = appointment.AppointmentDate.ToString("yyyy-MM-dd"),
+                Time = appointment.AppointmentDate.ToString("hh:mm tt", CultureInfo.InvariantCulture),
                 Status = appointment.Status,
                 Notes = appointment.Notes,
                 PatientName = patient.Username,
@@ -192,9 +169,7 @@ namespace HealthcareManagementSystem.Services.AppointmentService
             var appointment = await _context.Appointments.FindAsync(id);
 
             if (appointment == null)
-            {
-                return false;
-            }
+                throw new ArgumentException($"Appointment with ID '{id}' not found.");
 
             _context.Appointments.Remove(appointment);
             await _context.SaveChangesAsync();

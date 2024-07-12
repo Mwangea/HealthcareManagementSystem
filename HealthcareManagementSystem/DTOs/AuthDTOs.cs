@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HealthcareManagementSystem.Models.Invoicemodel;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+
 
 namespace HealthcareManagementSystem.DTOs
 {
@@ -115,8 +118,6 @@ namespace HealthcareManagementSystem.DTOs
 
     public class CreateAppointmentRequest
     {
-        //public int PatientId { get; set; }
-        //public int DoctorId { get; set; }
         [Required]
         public string PatientUsername { get; set; }
 
@@ -124,12 +125,17 @@ namespace HealthcareManagementSystem.DTOs
         public string DoctorUsername { get; set; }
 
         [Required]
-        public DateTime AppointmentDate { get; set; }
+        public DateTime DateOnly { get; set; }
+
+        [Required]
+        public string TimeOnly { get; set; }
 
         public string Notes { get; set; }
 
-        public DateTime DateOnly { get; set; }
-        public TimeSpan TimeOnly { get; set; }
+        public DateTime GetAppointmentDateTime()
+        {
+            return DateOnly.Date + DateTime.ParseExact(TimeOnly, "h:mm tt", CultureInfo.InvariantCulture).TimeOfDay;
+        }
 
 
     }
@@ -144,8 +150,8 @@ namespace HealthcareManagementSystem.DTOs
         public string Notes { get; set; }
         public string PatientName { get; set; }
         public string DoctorName { get; set; }
-        public DateTime Date { get; set; }
-        public TimeSpan Time { get; set; }
+        public string Date { get; set; }  // Change this to DateTime
+        public string Time { get; set; }
     }
 
     public class InvoiceDTO
@@ -154,6 +160,7 @@ namespace HealthcareManagementSystem.DTOs
         public string InvoiceNumber { get; set; }
         public DateTime Date { get; set; }
         public string PatientName { get; set; }
+        public string DoctorUsername { get; set; }
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
         public string InsuranceInformation { get; set; }
@@ -184,6 +191,8 @@ namespace HealthcareManagementSystem.DTOs
     {
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
+        public string PatientUsername { get; set; }
+        public string DoctorUsername { get; set; }
         public DateTime Date { get; set; }
         public List<CreateServiceDTO> Services { get; set; }
         public List<CreateChargeDTO> Charges { get; set; }
@@ -194,6 +203,14 @@ namespace HealthcareManagementSystem.DTOs
         public DateTime PaymentDate { get; set; }
         public decimal AmountPaid { get; set; }
     }
+
+    public class InvoiceResponse
+    {
+        public Invoice Invoice { get; set; }
+        public string DoctorUsername { get; set; }
+        public string PatientUsername { get; set; }
+    }
+
 
     public class ServiceDTO
     {
