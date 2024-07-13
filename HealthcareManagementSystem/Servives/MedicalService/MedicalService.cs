@@ -27,7 +27,7 @@ namespace HealthcareManagementSystem.Services.MedicalService
             var medicalRecord = new MedicalRecord
             {
                 PatientId = patient.Pat_id,
-                Date = createMedicalRecord.Date.ToString("yyyy-MM-dd"),
+                Date = createMedicalRecord.Date,
                 Diagnosis = createMedicalRecord.Diagnosis,
                 Treatment = createMedicalRecord.Treatment,
                 Notes = createMedicalRecord.Notes,
@@ -40,7 +40,7 @@ namespace HealthcareManagementSystem.Services.MedicalService
                 MedicalRecordId = medicalRecord.MedicalRecordId,
                 PatientId = medicalRecord.PatientId,
                 PatientName = medicalRecord.Patient.Username,
-                Date = DateTime.Parse(medicalRecord.Date).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                Date = medicalRecord.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                 Diagnosis = medicalRecord.Diagnosis,
                 Treatment = medicalRecord.Treatment,
                 Notes = medicalRecord.Notes,
@@ -63,7 +63,7 @@ namespace HealthcareManagementSystem.Services.MedicalService
                 MedicalRecordId = medicalRecords.MedicalRecordId,
                 PatientId = medicalRecords.PatientId,
                 PatientName = medicalRecords.Patient.Username,
-                Date = DateTime.Parse(medicalRecords.Date).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                Date = medicalRecords.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                 Diagnosis = medicalRecords.Diagnosis,
                 Treatment = medicalRecords.Treatment,
                 Notes = medicalRecords.Notes
@@ -81,7 +81,7 @@ namespace HealthcareManagementSystem.Services.MedicalService
                 MedicalRecordId = m.MedicalRecordId,
                 PatientId = m.PatientId,
                 PatientName = m.Patient.Username,
-                Date = DateTime.Parse(m.Date).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                Date = m.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                 Diagnosis = m.Diagnosis,
                 Treatment = m.Treatment,
                 Notes = m.Notes,
@@ -106,7 +106,7 @@ namespace HealthcareManagementSystem.Services.MedicalService
                 MedicalRecordId = m.MedicalRecordId,
                 PatientId = m.PatientId,
                 PatientName = m.Patient.Username,
-                Date = DateTime.Parse(m.Date).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                Date = m.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                 Diagnosis = m.Diagnosis,
                 Treatment = m.Treatment,
                 Notes = m.Notes,
@@ -124,7 +124,7 @@ namespace HealthcareManagementSystem.Services.MedicalService
                 throw new InvalidOperationException("The specified Medical Record does not exist");
             }
 
-            medicalRecord.Date = updateMedicalRecord.Date.ToString("yyyy-MM-dd");
+            medicalRecord.Date = updateMedicalRecord.Date;
             medicalRecord.Diagnosis = updateMedicalRecord.Diagnosis;
             medicalRecord.Treatment = updateMedicalRecord.Treatment;
             medicalRecord.Notes = updateMedicalRecord.Notes;
@@ -137,7 +137,7 @@ namespace HealthcareManagementSystem.Services.MedicalService
                 MedicalRecordId = medicalRecord.MedicalRecordId,
                 PatientId = medicalRecord.PatientId,
                 PatientName = medicalRecord.Patient.Username,
-                Date = DateTime.Parse(medicalRecord.Date).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                Date = medicalRecord.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                 Diagnosis = medicalRecord.Diagnosis,
                 Treatment = medicalRecord.Treatment,
                 Notes = medicalRecord.Notes,
