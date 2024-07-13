@@ -9,7 +9,7 @@ namespace HealthcareManagementSystem.Models.MedicalModel
 
        // public string PatientName { get; set; }         
         public Patient Patient { get; set; }
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
         public string Diagnosis { get; set; }
         public string Treatment { get; set; }
         public string Notes { get; set; }

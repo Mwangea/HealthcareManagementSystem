@@ -12,6 +12,8 @@ namespace HealthcareManagementSystem.Servives.MedicalService
 
         Task<List<MedicalRecordDTO>> GetAllMedicalRecordsAsync();
 
+
+
         Task<MedicalRecordDTO> UpdateMedicalRecordAsync(int id, UpdateMedicalRecordDTO updateMedicalRecord);
 
         Task<bool> DeleteMedicalRecordAsync(int id);
