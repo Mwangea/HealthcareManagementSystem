@@ -88,7 +88,7 @@ namespace HealthcareManagementSystem.Controllers
             return Ok(new { message = "Doctor updated successfully" });
         }
 
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Doctor,Admin")]
         [HttpDelete("doctors/{id}")]
         public async Task<IActionResult> DeleteDoctor(int id)
         {

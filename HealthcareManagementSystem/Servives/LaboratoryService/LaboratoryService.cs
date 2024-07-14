@@ -3,13 +3,14 @@ using HealthcareManagementSystem.DTOs;
 using Microsoft.EntityFrameworkCore;
 using HealthcareManagementSystem.Models.LabModel;
 using System;
+using System.Globalization;
+using HealthcareManagementSystem.Servives.LaboratoryService;
 
-namespace HealthcareManagementSystem.Servives.LaboratoryService
+namespace HealthcareManagementSystem.Services.LaboratoryService
 {
     public class LaboratoryService : ILaboratoryService
     {
         private readonly ApplicationDbContext _context;
-        //private static readonly Random random = new Random();
 
         public LaboratoryService(ApplicationDbContext context)
         {
@@ -27,10 +28,9 @@ namespace HealthcareManagementSystem.Servives.LaboratoryService
             return result;
         }
 
-
-        public async Task<LabTestDTO>  AddLabTestAsync(CreateLabTestDTO createLabTest)
+        public async Task<LabTestDTO> AddLabTestAsync(CreateLabTestDTO createLabTest)
         {
-            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Pat_id == createLabTest.PatientId);
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Username == createLabTest.LabPatientName);
             if (patient == null)
             {
                 throw new KeyNotFoundException("The specified Patient does not exist");
@@ -38,14 +38,14 @@ namespace HealthcareManagementSystem.Servives.LaboratoryService
 
             var labTest = new Lab
             {
-                PatientId = createLabTest.PatientId,
+                PatientId = patient.Pat_id,
                 LabPatientName = patient.Username,
                 LabPatAilment = createLabTest.LabPatAilment,
                 LabPatNumber = GenerateUniqueNumber(),
                 LabPatTests = createLabTest.LabPatTests,
                 LabPatResults = createLabTest.LabPatResults,
                 LabNumber = GenerateUniqueNumber(),
-                LabDateRec = createLabTest.LabDateRec,
+                LabDateRec = DateTime.ParseExact(createLabTest.LabDateRec, "yyyy-MM-dd", CultureInfo.InvariantCulture),
             };
 
             _context.LabTests.Add(labTest);
@@ -61,7 +61,7 @@ namespace HealthcareManagementSystem.Servives.LaboratoryService
                 LabPatTests = labTest.LabPatTests,
                 LabPatResults = labTest.LabPatResults,
                 LabNumber = labTest.LabNumber,
-                LabDateRec = labTest.LabDateRec,
+                LabDateRec = labTest.LabDateRec.ToString("yyyy-MM-dd"),
             };
         }
 
@@ -69,7 +69,7 @@ namespace HealthcareManagementSystem.Servives.LaboratoryService
         {
             var labTest = await _context.LabTests
                 .Include(t => t.Patient)
-                .FirstOrDefaultAsync(t =>  t.PatientId == id);
+                .FirstOrDefaultAsync(t => t.Id == id);
             if (labTest == null)
             {
                 throw new KeyNotFoundException("The specified Lab Test does not exist");
@@ -85,7 +85,7 @@ namespace HealthcareManagementSystem.Servives.LaboratoryService
                 LabPatTests = labTest.LabPatTests,
                 LabPatResults = labTest.LabPatResults,
                 LabNumber = labTest.LabNumber,
-                LabDateRec = labTest.LabDateRec,
+                LabDateRec = labTest.LabDateRec.ToString("yyyy-MM-dd"),
             };
         }
 
@@ -102,25 +102,22 @@ namespace HealthcareManagementSystem.Servives.LaboratoryService
                     LabPatTests = d.LabPatTests,
                     LabPatResults = d.LabPatResults,
                     LabNumber = d.LabNumber,
-                    LabDateRec = d.LabDateRec,
+                    LabDateRec = d.LabDateRec.ToString("yyyy-MM-dd"),
                 }).ToListAsync();
         }
 
-        public async Task<LabTestDTO> UpdateLabTestAsync(int id, UpdateLabTestDTO updatelabtest)
+        public async Task<LabTestDTO> UpdateLabTestAsync(int id, UpdateLabTestDTO updateLabTest)
         {
             var labTest = await _context.LabTests.FindAsync(id);
             if (labTest == null)
             {
-                //Console.WriteLine($"Lab Test with ID {id} not found.");
                 throw new KeyNotFoundException("The specified Lab Test does not exist");
             }
 
-            labTest.LabPatAilment = updatelabtest.LabPatAilment;
-           // labTest.LabPatNumber = updateLabTest.LabPatNumber;
-            labTest.LabPatTests = updatelabtest.LabPatTests;
-            labTest.LabPatResults = updatelabtest.LabPatResults;
-           // labTest.LabNumber = updateLabTest.LabNumber;
-            labTest.LabDateRec = updatelabtest.LabDateRec;
+            labTest.LabPatAilment = updateLabTest.LabPatAilment;
+            labTest.LabPatTests = updateLabTest.LabPatTests;
+            labTest.LabPatResults = updateLabTest.LabPatResults;
+            labTest.LabDateRec = DateTime.ParseExact(updateLabTest.LabDateRec, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
             _context.LabTests.Update(labTest);
             await _context.SaveChangesAsync();
@@ -135,7 +132,7 @@ namespace HealthcareManagementSystem.Servives.LaboratoryService
                 LabPatTests = labTest.LabPatTests,
                 LabPatResults = labTest.LabPatResults,
                 LabNumber = labTest.LabNumber,
-                LabDateRec = labTest.LabDateRec,
+                LabDateRec = labTest.LabDateRec.ToString("yyyy-MM-dd"),
             };
         }
 

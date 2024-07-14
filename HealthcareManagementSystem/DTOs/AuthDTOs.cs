@@ -284,7 +284,7 @@ namespace HealthcareManagementSystem.DTOs
         public string PatientName { get; set; }
         public string LabPatTests { get; set; }
         public string LabPatNumber { get; set; }
-        public DateTime LabDateRec { get; set; }
+        public string LabDateRec { get; set; }
         public string LabPatResults { get; set; }
         public string LabPatAilment { get; set; }
         public string LabNumber { get; set; }
@@ -293,13 +293,13 @@ namespace HealthcareManagementSystem.DTOs
     public class CreateLabTestDTO
     {
         public int PatientId { get; set; }
-      //  public string LabPatientName { get; set; }
+        public string LabPatientName { get; set; }
         public string LabPatAilment { get; set; }
         //public string LabPatNumber { get; set; }
         public string LabPatTests { get; set; }
         public string LabPatResults { get; set; }
        // public string LabNumber { get; set; }
-        public DateTime LabDateRec { get; set; }
+        public string LabDateRec { get; set; }
     }
 
     public class UpdateLabTestDTO
@@ -307,7 +307,7 @@ namespace HealthcareManagementSystem.DTOs
         public string LabPatTests { get; set; }
         public string LabPatAilment { get; set; }
         public string LabPatResults { get; set; }
-        public DateTime LabDateRec { get; set; }
+        public string LabDateRec { get; set; }
     }
 
     public class MedicineDTO
