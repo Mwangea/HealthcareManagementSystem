@@ -20,6 +20,7 @@ using System.Text;
 using HealthcareManagementSystem.Services.InvoiceServices;
 using HealthcareManagementSystem.Services.MedicalService;
 using HealthcareManagementSystem.Services.LaboratoryService;
+using HealthcareManagementSystem.Services.UserService;
 
 namespace HealthcareManagementSystem
 {

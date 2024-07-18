@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using HealthcareManagementSystem.Data;
 using HealthcareManagementSystem.DTOs;
+using HealthcareManagementSystem.Servives.UserService;
+using HealthcareManagementSystem.Services.UserService;
 
 namespace HealthcareManagementSystem.Servives.UserService
 {
@@ -12,18 +14,6 @@ namespace HealthcareManagementSystem.Servives.UserService
         public UserService(ApplicationDbContext context)
         {
             _context = context;
-        }
-
-        public async Task<int?> GetDoctorIdByUsernameAsync(string username)
-        {
-            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Username == username);
-            return doctor?.Id;
-        }
-
-        public async Task<int?> GetPatientIdByUsernameAsync(string username)
-        {
-            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Username == username);
-            return patient?.Pat_id;
         }
 
         public async Task<bool> UpdateDoctorProfileAsync(int userId, DoctorProfileDto doctorProfileDto)
@@ -78,7 +68,31 @@ namespace HealthcareManagementSystem.Servives.UserService
             return true;
         }
 
+        public async Task<DoctorProfileDto> GetDoctorProfileAsync(int userId)
+        {
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == userId);
+            if (doctor == null)
+                return null;
 
+            return new DoctorProfileDto
+            {
+                Username = doctor.Username,
+                Email = doctor.Email,
+                Specialty = doctor.Specialty
+            };
+        }
+
+        public async Task<AdminProfileDto> GetAdminProfileAsync(int userId)
+        {
+            var admin = await _context.Admins.FirstOrDefaultAsync(a => a.Id == userId);
+            if (admin == null)
+                return null;
+
+            return new AdminProfileDto
+            {
+                Username = admin.Username,
+                Email = admin.Email
+            };
+        }
     }
-    
 }

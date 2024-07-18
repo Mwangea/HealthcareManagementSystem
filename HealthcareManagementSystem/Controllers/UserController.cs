@@ -1,9 +1,12 @@
 ﻿using HealthcareManagementSystem.Data;
 using HealthcareManagementSystem.DTOs;
+using HealthcareManagementSystem.Services.UserService;
+using HealthcareManagementSystem.Servives.UserService;
 using HealthcareManagementSystem.Servives.UserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace HealthcareManagementSystem.Controllers
 {
@@ -17,6 +20,32 @@ namespace HealthcareManagementSystem.Controllers
         public UserController(IUserService userService)
         {
             _userService = userService;
+        }
+
+        [HttpGet("doctor/profile/{id}")]
+        [Authorize(Policy = "Doctor")]
+        public async Task<IActionResult> GetDoctorProfile(int id)
+        {
+            var doctorProfile = await _userService.GetDoctorProfileAsync(id);
+            if (doctorProfile == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(doctorProfile);
+        }
+
+        [HttpGet("admin/profile/{id}")]
+        [Authorize(Policy = "Admin")]
+        public async Task<IActionResult> GetAdminProfile(int id)
+        {
+            var adminProfile = await _userService.GetAdminProfileAsync(id);
+            if (adminProfile == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(adminProfile);
         }
 
         [HttpPut("doctor/profile")]
@@ -37,7 +66,6 @@ namespace HealthcareManagementSystem.Controllers
 
             return BadRequest(new { message = "Failed to update profile" });
         }
-
 
         [HttpDelete("doctor/profile")]
         [Authorize(Policy = "Doctor")]
