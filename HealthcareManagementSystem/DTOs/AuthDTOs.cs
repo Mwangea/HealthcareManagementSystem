@@ -340,4 +340,17 @@ namespace HealthcareManagementSystem.DTOs
         public DateTime ExpiryDate { get; set; }
         public string Manufacturer { get; set; }
     }
+
+    public class DoctorProfileDto
+    {
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string Specialty { get; set; }
+    }
+
+    public class AdminProfileDto
+    {
+        public string Username { get; set; }
+        public string Email { get; set; }
+    }
 }
