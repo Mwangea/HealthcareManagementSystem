@@ -46,15 +46,28 @@ namespace HealthcareManagementSystem.Servives
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdatePatientAsync(int id)
+        public async Task UpdatePatientAsync(int id, Patient updatedPatient)
         {
             var patient = await _context.Patients.FindAsync(id);
             if (patient != null)
             {
-                _context.Patients.Update(patient);
+                patient.Username = updatedPatient.Username;
+                patient.Pat_dob = updatedPatient.Pat_dob;
+                patient.Pat_age = updatedPatient.Pat_age;
+                patient.Pat_number = updatedPatient.Pat_number;
+                patient.Pat_addr = updatedPatient.Pat_addr;
+                patient.Pat_phone = updatedPatient.Pat_phone;
+                patient.Pat_type = updatedPatient.Pat_type;
+                patient.Pat_date_joined = updatedPatient.Pat_date_joined;
+                patient.Pat_ailment = updatedPatient.Pat_ailment;
+                patient.Pat_discharge_status = updatedPatient.Pat_discharge_status;
+                patient.Pat_blood_group = updatedPatient.Pat_blood_group;
+                patient.Gender = updatedPatient.Gender;
+
+                await _context.SaveChangesAsync();
             }
-            await _context.SaveChangesAsync();
         }
+
 
         public async Task DeletePatientAsync (int id)
         {

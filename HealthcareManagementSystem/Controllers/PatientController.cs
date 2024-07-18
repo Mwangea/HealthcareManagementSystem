@@ -55,20 +55,16 @@ namespace HealthcareManagementSystem.Controllers
         [Authorize(Policy = "Doctor,Admin")]
         public async Task<IActionResult> UpdatePatient(int id, [FromBody] Patient patient)
         {
-            if (id != patient.Pat_id)
-            {
-                return BadRequest(new { message = "Patient ID mismatch" });
-            }
-
             var existingPatient = await _patientService.GetPatientByIdAsync(id);
             if (existingPatient == null)
             {
                 return NotFound(new { message = "Patient not found" });
             }
 
-            await _patientService.UpdatePatientAsync(id);
-            return Ok(new { message = "Patient updated successfully"});
+            await _patientService.UpdatePatientAsync(id, patient);
+            return Ok(new { message = "Patient updated successfully" });
         }
+
 
         [HttpDelete("{id}")]
         [Authorize(Policy ="Doctor,Admin")]
