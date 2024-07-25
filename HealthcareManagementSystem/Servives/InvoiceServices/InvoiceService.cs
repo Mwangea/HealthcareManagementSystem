@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using HealthcareManagementSystem.Data;
 using HealthcareManagementSystem.DTOs;
-//using HealthcareManagementSystem.Models.InvoiceModels;
 using HealthcareManagementSystem.Models.Invoicemodel;
+using HealthcareManagementSystem.Services.InvoiceServices;
+using System.Globalization;
 using HealthcareManagementSystem.Servives.InvoiceServices;
 
 namespace HealthcareManagementSystem.Services.InvoiceServices
@@ -22,7 +23,6 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
 
         public async Task<InvoiceResponse> AddInvoiceAsync(CreateInvoiceDTO invoiceDto)
         {
-            // Fetch the PatientId and DoctorId using the provided usernames
             var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Username == invoiceDto.PatientUsername);
             var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Username == invoiceDto.DoctorUsername);
 
@@ -35,7 +35,7 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
             {
                 PatientId = patient.Pat_id,
                 DoctorId = doctor.Id,
-                Date = invoiceDto.Date,
+                Date = DateTime.ParseExact(invoiceDto.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 InvoiceNumber = GenerateInvoiceNumber(),
                 Subtotal = invoiceDto.Subtotal,
                 Tax = invoiceDto.Tax,
@@ -57,29 +57,24 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
                     Total = c.Quantity * c.UnitPrice
                 }).ToList(),
                 PaymentMethod = invoiceDto.PaymentMethod,
-                PaymentDate = invoiceDto.PaymentDate,
+                PaymentDate = DateTime.ParseExact(invoiceDto.PaymentDate, "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 AmountPaid = invoiceDto.AmountPaid
             };
 
-            // Calculate subtotal
             invoice.Subtotal = invoice.Services.Sum(s => s.Total) + invoice.Charges.Sum(c => c.Total);
-
-            // Calculate tax (tax rate is 4%)
             decimal taxRate = 4; // 4% tax rate
             invoice.Tax = invoice.Subtotal * (taxRate / 100);
-
-            // Calculate total
             invoice.Total = invoice.Subtotal + invoice.Tax;
 
             _context.Invoices.Add(invoice);
             await _context.SaveChangesAsync();
 
             return new InvoiceResponse
-            { 
-              Invoice = invoice,
-              DoctorUsername = doctor.Username,
-              PatientUsername = patient.Username,
-            
+            {
+                Invoice = invoice,
+                DoctorUsername = doctor.Username,
+                PatientUsername = patient.Username,
+
             };
         }
 
@@ -102,7 +97,6 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
                 return null;
             }
 
-            // Fetch patient and doctor details using the foreign keys
             var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Pat_id == invoice.PatientId);
             var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == invoice.DoctorId);
 
@@ -118,16 +112,17 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
                 DoctorId = invoice.DoctorId,
                 PatientName = patient.Username,
                 DoctorUsername = doctor.Username,
-                Date = invoice.Date,
+                Date = invoice.Date.ToString("dd/MM/yyyy"),
                 InvoiceNumber = invoice.InvoiceNumber,
                 Subtotal = invoice.Subtotal,
                 Tax = invoice.Tax,
                 Total = invoice.Total,
                 PaymentMethod = invoice.PaymentMethod,
-                PaymentDate = invoice.PaymentDate,
+                PaymentDate = invoice.PaymentDate.ToString("dd/MM/yyyy"),
                 AmountPaid = invoice.AmountPaid,
                 Services = invoice.Services.Select(s => new ServiceDTO
                 {
+                    Id = s.Service_id,
                     Description = s.Description,
                     Code = s.Code,
                     Quantity = s.Quantity,
@@ -136,6 +131,7 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
                 }).ToList(),
                 Charges = invoice.Charges.Select(c => new ChargeDTO
                 {
+                    Id = c.Charge_id,
                     Description = c.Description,
                     Code = c.Code,
                     Quantity = c.Quantity,
@@ -156,7 +152,6 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
 
             foreach (var invoice in invoices)
             {
-                // Fetch patient and doctor details using the foreign keys
                 var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Pat_id == invoice.PatientId);
                 var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == invoice.DoctorId);
 
@@ -172,16 +167,17 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
                     DoctorId = invoice.DoctorId,
                     PatientName = patient.Username,
                     DoctorUsername = doctor.Username,
-                    Date = invoice.Date,
+                    Date = invoice.Date.ToString("dd/MM/yyyy"),
                     InvoiceNumber = invoice.InvoiceNumber,
                     Subtotal = invoice.Subtotal,
                     Tax = invoice.Tax,
                     Total = invoice.Total,
                     PaymentMethod = invoice.PaymentMethod,
-                    PaymentDate = invoice.PaymentDate,
+                    PaymentDate = invoice.PaymentDate.ToString("dd/MM/yyyy"),
                     AmountPaid = invoice.AmountPaid,
                     Services = invoice.Services.Select(s => new ServiceDTO
                     {
+                        Id = s.Service_id,
                         Description = s.Description,
                         Code = s.Code,
                         Quantity = s.Quantity,
@@ -190,6 +186,7 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
                     }).ToList(),
                     Charges = invoice.Charges.Select(c => new ChargeDTO
                     {
+                        Id = c.Charge_id,
                         Description = c.Description,
                         Code = c.Code,
                         Quantity = c.Quantity,
@@ -230,9 +227,9 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
 
             invoice.PatientId = invoiceDto.PatientId;
             invoice.DoctorId = invoiceDto.DoctorId;
-            invoice.Date = invoiceDto.Date;
+            invoice.Date = DateTime.ParseExact(invoiceDto.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             invoice.PaymentMethod = invoiceDto.PaymentMethod;
-            invoice.PaymentDate = (DateTime)invoiceDto.PaymentDate;
+            invoice.PaymentDate = DateTime.ParseExact(invoiceDto.PaymentDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             invoice.AmountPaid = invoiceDto.AmountPaid;
 
             // Update Services
@@ -285,39 +282,32 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
                 }
             }
 
-            // Calculate subtotal
             invoice.Subtotal = invoice.Services.Sum(s => s.Total) + invoice.Charges.Sum(c => c.Total);
-
-            // Calculate tax (tax rate is 4%)
             decimal taxRate = 4; // 4% tax rate
             invoice.Tax = invoice.Subtotal * (taxRate / 100);
-
-            // Calculate total
             invoice.Total = invoice.Subtotal + invoice.Tax;
 
             _context.Invoices.Update(invoice);
             await _context.SaveChangesAsync();
-
-            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Pat_id == invoice.PatientId);
-            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == invoice.DoctorId);
 
             return new InvoiceDTO
             {
                 Id = invoice.Invoice_id,
                 PatientId = invoice.PatientId,
                 DoctorId = invoice.DoctorId,
-                PatientName = patient.Username,
-                DoctorUsername = doctor.Username,
-                Date = invoice.Date,
+                PatientName = (await _context.Patients.FirstOrDefaultAsync(p => p.Pat_id == invoice.PatientId))?.Username,
+                DoctorUsername = (await _context.Doctors.FirstOrDefaultAsync(d => d.Id == invoice.DoctorId))?.Username,
+                Date = invoice.Date.ToString("dd/MM/yyyy"),
                 InvoiceNumber = invoice.InvoiceNumber,
                 Subtotal = invoice.Subtotal,
                 Tax = invoice.Tax,
                 Total = invoice.Total,
                 PaymentMethod = invoice.PaymentMethod,
-                PaymentDate = invoice.PaymentDate,
+                PaymentDate = invoice.PaymentDate.ToString("dd/MM/yyyy"),
                 AmountPaid = invoice.AmountPaid,
                 Services = invoice.Services.Select(s => new ServiceDTO
                 {
+                    Id = s.Service_id,
                     Description = s.Description,
                     Code = s.Code,
                     Quantity = s.Quantity,
@@ -326,6 +316,7 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
                 }).ToList(),
                 Charges = invoice.Charges.Select(c => new ChargeDTO
                 {
+                    Id = c.Charge_id,
                     Description = c.Description,
                     Code = c.Code,
                     Quantity = c.Quantity,
@@ -337,7 +328,8 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
 
         public async Task<bool> DeleteInvoiceAsync(int id)
         {
-            var invoice = await _context.Invoices.FindAsync(id);
+            var invoice = await _context.Invoices.FirstOrDefaultAsync(i => i.Invoice_id == id);
+
             if (invoice == null)
             {
                 return false;

@@ -107,13 +107,13 @@ namespace HealthcareManagementSystem.Controllers
                 Invoice_id = invoiceDto.Id,
                 PatientId = invoiceDto.PatientId,
                 DoctorId = invoiceDto.DoctorId,
-                Date = invoiceDto.Date,
+                Date = DateTime.Parse(invoiceDto.Date),
                 InvoiceNumber = invoiceDto.InvoiceNumber,
                 Subtotal = invoiceDto.Subtotal,
                 Tax = invoiceDto.Tax,
                 Total = invoiceDto.Total,
                 PaymentMethod = invoiceDto.PaymentMethod,
-                PaymentDate = invoiceDto.PaymentDate,
+                PaymentDate = DateTime.Parse(invoiceDto.Date),
                 AmountPaid = invoiceDto.AmountPaid,
                 Services = invoiceDto.Services.Select(s => new Service
                 {

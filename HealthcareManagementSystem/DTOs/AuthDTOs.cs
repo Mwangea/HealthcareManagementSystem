@@ -157,50 +157,46 @@ namespace HealthcareManagementSystem.DTOs
     public class InvoiceDTO
     {
         public int Id { get; set; }
-        public string InvoiceNumber { get; set; }
-        public DateTime Date { get; set; }
-        public string PatientName { get; set; }
-        public string DoctorUsername { get; set; }
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
-        public string InsuranceInformation { get; set; }
-        public List<ServiceDTO> Services { get; set; }
-        public List<ChargeDTO> Charges { get; set; }
+        public string PatientName { get; set; }
+        public string DoctorUsername { get; set; }
+        public string Date { get; set; }
+        public string InvoiceNumber { get; set; }
         public decimal Subtotal { get; set; }
         public decimal Tax { get; set; }
         public decimal Total { get; set; }
         public string PaymentMethod { get; set; }
-        public DateTime PaymentDate { get; set; }
+        public string PaymentDate { get; set; }
         public decimal AmountPaid { get; set; }
+        public List<ServiceDTO> Services { get; set; }
+        public List<ChargeDTO> Charges { get; set; }
     }
 
     public class UpdateInvoiceDTO
     {
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
-        public DateTime Date { get; set; }
-        public string PaymentMethod { get; set; }
-        public DateTime? PaymentDate { get; set; }
-        public decimal AmountPaid { get; set; }
-
+        public string Date { get; set; }
         public List<ServiceDTO> Services { get; set; }
         public List<ChargeDTO> Charges { get; set; }
+        public string PaymentMethod { get; set; }
+        public string PaymentDate { get; set; }
+        public decimal AmountPaid { get; set; }
     }
 
     public class CreateInvoiceDTO
     {
-        public int PatientId { get; set; }
-        public int DoctorId { get; set; }
         public string PatientUsername { get; set; }
         public string DoctorUsername { get; set; }
-        public DateTime Date { get; set; }
-        public List<CreateServiceDTO> Services { get; set; }
-        public List<CreateChargeDTO> Charges { get; set; }
+        public string Date { get; set; }
         public decimal Subtotal { get; set; }
         public decimal Tax { get; set; }
         public decimal Total { get; set; }
+        public List<ServiceDTO> Services { get; set; }
+        public List<ChargeDTO> Charges { get; set; }
         public string PaymentMethod { get; set; }
-        public DateTime PaymentDate { get; set; }
+        public string PaymentDate { get; set; }
         public decimal AmountPaid { get; set; }
     }
 
