@@ -49,6 +49,21 @@ namespace HealthcareManagementSystem.Controllers
             return Ok(invoice);
         }
 
+        [HttpGet("doctor/{doctorId}")]
+        public async Task<ActionResult<List<InvoiceDTO>>> GetInvoicesByDoctorIdAsync(int doctorId)
+        {
+            try
+            {
+                var invoices = await _invoiceService.GetInvoicesByDoctorIdAsync(doctorId);
+                return Ok(invoices);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+
         [HttpGet]
         [Authorize(Policy = "Doctor,Admin")]
         public async Task<ActionResult<List<InvoiceDTO>>> GetAllInvoices()

@@ -8,6 +8,7 @@ namespace HealthcareManagementSystem.Servives.InvoiceServices
         Task<InvoiceResponse> AddInvoiceAsync(CreateInvoiceDTO invoiceDto);
         Task<InvoiceDTO> GetInvoiceByIdAsync(int id);
         Task<List<InvoiceDTO>> GetAllInvoicesAsync();
+        Task<List<InvoiceDTO>> GetInvoicesByDoctorIdAsync(int doctorId);
         Task<InvoiceDTO> UpdateInvoiceAsync(int id, UpdateInvoiceDTO invoiceDto);
         Task<bool> DeleteInvoiceAsync(int id);
     }

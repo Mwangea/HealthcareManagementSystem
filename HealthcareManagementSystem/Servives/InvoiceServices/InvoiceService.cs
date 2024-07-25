@@ -140,6 +140,68 @@ namespace HealthcareManagementSystem.Services.InvoiceServices
                 }).ToList()
             };
         }
+        public async Task<List<InvoiceDTO>> GetInvoicesByDoctorIdAsync(int doctorId)
+        {
+            var invoices = await _context.Invoices
+                .Where(i => i.DoctorId == doctorId) // Compare using int
+                .Include(i => i.Services)
+                .Include(i => i.Charges)
+                .ToListAsync();
+
+            var invoiceDTOs = new List<InvoiceDTO>();
+
+            foreach (var invoice in invoices)
+            {
+                var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Pat_id == invoice.PatientId);
+                var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == invoice.DoctorId);
+
+                if (patient == null || doctor == null)
+                {
+                    continue; // Skip if patient or doctor is not found
+                }
+
+                var invoiceDTO = new InvoiceDTO
+                {
+                    Id = invoice.Invoice_id,
+                    PatientId = invoice.PatientId,
+                    DoctorId = invoice.DoctorId,
+                    PatientName = patient.Username,
+                    DoctorUsername = doctor.Username,
+                    Date = invoice.Date.ToString("dd/MM/yyyy"),
+                    InvoiceNumber = invoice.InvoiceNumber,
+                    Subtotal = invoice.Subtotal,
+                    Tax = invoice.Tax,
+                    Total = invoice.Total,
+                    PaymentMethod = invoice.PaymentMethod,
+                    PaymentDate = invoice.PaymentDate.ToString("dd/MM/yyyy"),
+                    AmountPaid = invoice.AmountPaid,
+                    Services = invoice.Services.Select(s => new ServiceDTO
+                    {
+                        Id = s.Service_id,
+                        Description = s.Description,
+                        Code = s.Code,
+                        Quantity = s.Quantity,
+                        UnitPrice = s.UnitPrice,
+                        Total = s.Total
+                    }).ToList(),
+                    Charges = invoice.Charges.Select(c => new ChargeDTO
+                    {
+                        Id = c.Charge_id,
+                        Description = c.Description,
+                        Code = c.Code,
+                        Quantity = c.Quantity,
+                        UnitPrice = c.UnitPrice,
+                        Total = c.Total
+                    }).ToList()
+                };
+
+                invoiceDTOs.Add(invoiceDTO);
+            }
+
+            return invoiceDTOs;
+        }
+
+
 
         public async Task<List<InvoiceDTO>> GetAllInvoicesAsync()
         {
