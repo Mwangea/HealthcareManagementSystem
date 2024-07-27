@@ -60,7 +60,7 @@ namespace HealthcareManagementSystem.Helpers
                 billingTable.AddCell(GetCellWithLeading("Invoice from:", PdfPCell.ALIGN_LEFT, boldFont, PdfPCell.NO_BORDER));
                 billingTable.AddCell(GetCellWithLeading("Billed to:", PdfPCell.ALIGN_RIGHT, boldFont, PdfPCell.NO_BORDER));
 
-                billingTable.AddCell(GetCellWithLeading($"{invoiceResponse.DoctorUsername}\n1234 Main St, Nairobi, KENYA\nEmail: s***@gmail.com\nPhone: 0708***430", PdfPCell.ALIGN_LEFT, regularFont, PdfPCell.NO_BORDER));
+                billingTable.AddCell(GetCellWithLeading("NairobiGeneral\n" + "1234 Main St, Nairobi, KENYA\nEmail: s***@gmail.com\nPhone: 0708***430", PdfPCell.ALIGN_LEFT, regularFont, PdfPCell.NO_BORDER));
                 billingTable.AddCell(GetCellWithLeading($"{invoiceResponse.PatientUsername}\n5678 RiverRoad, Nairobi, Kenya\ninfo@tajiriwango.com\n0712761212", PdfPCell.ALIGN_RIGHT, regularFont, PdfPCell.NO_BORDER));
 
                 document.Add(billingTable);

@@ -6,6 +6,7 @@ using HealthcareManagementSystem.Servives.InvoiceServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -122,13 +123,13 @@ namespace HealthcareManagementSystem.Controllers
                 Invoice_id = invoiceDto.Id,
                 PatientId = invoiceDto.PatientId,
                 DoctorId = invoiceDto.DoctorId,
-                Date = DateTime.Parse(invoiceDto.Date),
+                Date = DateTime.ParseExact(invoiceDto.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 InvoiceNumber = invoiceDto.InvoiceNumber,
                 Subtotal = invoiceDto.Subtotal,
                 Tax = invoiceDto.Tax,
                 Total = invoiceDto.Total,
                 PaymentMethod = invoiceDto.PaymentMethod,
-                PaymentDate = DateTime.Parse(invoiceDto.Date),
+                PaymentDate = DateTime.ParseExact(invoiceDto.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 AmountPaid = invoiceDto.AmountPaid,
                 Services = invoiceDto.Services.Select(s => new Service
                 {
